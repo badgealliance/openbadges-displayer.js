@@ -4,6 +4,9 @@ build:
 buildDev:
 	./node_modules/.bin/browserify ./src/index.js -d -o build/openbadgesDisplay.js
 
+buildDemoSite:
+	cp resources/* .
+
 server:
 	static .
 

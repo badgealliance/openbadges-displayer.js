@@ -1,18 +1,31 @@
+# Makefile
+GITHUB_REPO ?= cmcavoy/openbadges-displayer.js
+
+# Sends the documentation to gh-pages.
+demoDeploy: buildDemoSite
+	cd demoSite && \
+	git init . && \
+	git add . && \
+	git commit -m "Update demosite."; \
+	git push "git@github.com:$(GITHUB_REPO).git" master:gh-pages --force && \
+	rm -rf .git
+
 build:
-	./node_modules/.bin/browserify ./src/index.js -o distrib/openbadgesDisplay.js
+	rm -rf build
+	mkdir build
+	./node_modules/.bin/browserify ./src/index.js -o build/openbadgesDisplay.js
 
-buildDev:
-	./node_modules/.bin/browserify ./src/index.js -d -o build/openbadgesDisplay.js
-
-buildDemoSite:
-	cp resources/* .
+buildDemoSite: build
+	rm -rf demoSite
+	mkdir demoSite
+	cp resources/* demoSite
+	mkdir demoSite/build
+	cp build/* demoSite/build
 
 server:
 	static .
 
 devserver:
-	beefy src/index.js:build/openbadgesDisplay.js --live
+	beefy --cwd resources ../src/index.js:build/openbadgesDisplay.js --live
 
-run: buildDev server
-
-.PHONY: build buildDev server run devserver
+.PHONY: build buildDev server run devserver demoDeploy

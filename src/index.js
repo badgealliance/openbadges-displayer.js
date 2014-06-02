@@ -50,7 +50,7 @@ var ParseBadges = function() {
 }
 
 module.exports.ParseBadges = ParseBadges
-
 if (document) {
   window.ParseBadges = ParseBadges
+  ParseBadges()
 }

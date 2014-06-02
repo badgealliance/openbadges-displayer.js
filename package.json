@@ -1,0 +1,21 @@
+{
+  "name": "openbadges-displayer.js",
+  "version": "0.0.0",
+  "description": "A Javascript client library for easily displaying meta-information about baked open badges.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "browserify": "~4.1.5",
+    "openbadges-bakery": "~1.0.2",
+    "underscore": "~1.6.0",
+    "jQuery": "~1.7.4",
+    "jquery": "~2.1.1"
+  },
+  "devDependencies": {
+    "beefy": "*"
+  }
+}

@@ -3,26 +3,33 @@
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   <style>
     body {
-      font-family : 'Open Sans'
+      font-family : 'Open Sans';
+      margin-left: 40px;
+      margin-right: 40px;
     }
     #assertion {
-      font-weight: bold
+      font-weight: bold;
+      background-color: yellow;
     }
   </style>
 </head>
 <body>
-  <h1>Baked Badge Demo</h1>
+  <h1>Baked Badges in the Browser</h1>
   <p>Back in September, Mike wrote <a href="http://stenington.tumblr.com/post/62155201834/display-without-the-displayer-api">a great blog post</a> where he pulled the assertion url from a baked badge included on the page. Since then, we've changed the specification to allow for the full badge to be baked.
-  </p>
-  <p>This demo shows a badge with the new style baking being unbaked in the page. From the end users perspective, the only thing they would need to do is add the badges to the page, and then include a bit of Javascript.</p>
+      This demo shows a badge with the new style baking being unbaked in the page. From the end users perspective, the only thing they would need to do is add the badges to the page, and then include a bit of Javascript.</p>
 
   <h2>The Badge</h2>
   <div><img src="demobadge.png"></div>
 
-  <h2>The Badge Title and Description</h2>
-  <p>Extracted from the baked badge in the browser, no server side code is called or necessary</p>
+  <h2>Unbaking the Badge Without a Server</h2>
+  <p><button id="unbake">Unbake the Badge</button></p>
+
   <div id="assertion">
 
+  </div>
+  <div id="explanation">
+    <h3>What just happened?</h3>
+    <p>When you pressed the button, the Javascript included on this page found the badge above, pulled the metadata that's 'baked' into the badge, and inserted some of it into the paragraph above. All without a server!</p>
   </div>
 
   <h2>What's the big deal?</h2>

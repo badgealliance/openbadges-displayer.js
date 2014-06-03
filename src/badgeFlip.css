@@ -37,12 +37,12 @@
 }
 
 /* front pane, placed above back */
-.flip-container .front {
+.front {
   z-index: 2;
 }
 
 /* back, initially hidden pane */
-.flip-container .back {
+.back {
   -webkit-transform: rotateY(180deg);
   -moz-transform: rotateY(180deg);
   transform: rotateY(180deg);

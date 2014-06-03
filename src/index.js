@@ -1,7 +1,9 @@
 var baker = require('../vendor/png-baker')
 var _ = require('underscore')
+var fs = require('fs')
+var insertCss = require('insert-css')
+var css = fs.readFileSync(__dirname + '/badgeFlip.css')
 var $ = require('jquery')
-
 
 var _parser = function(images, callback) {
   _.each(images, function(i) {
@@ -52,5 +54,18 @@ var ParseBadges = function() {
 module.exports.ParseBadges = ParseBadges
 if (document) {
   window.ParseBadges = ParseBadges
-  ParseBadges()
+/*  ParseBadges(function(badge) {
+    console.log("hello there")
+    console.log(badge)
+    var el = $(badge.el)
+    var newDom = $('<div class="flip-container">' +
+                   '<div class="flipper" ontouchstart="this.classList.toggle("hover");>' +
+       //            '<div class="front"><img src="' + badge.image + '"></div>' +
+                   '<div class="back">Hi There</div>' +
+                   '</div></div>')
+    el.wrap(newDom)
+    insertCss(css)
+
+    console.log(el)
+  }) */
 }

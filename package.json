@@ -12,7 +12,8 @@
     "browserify": "~4.1.5",
     "openbadges-bakery": "~1.0.2",
     "underscore": "~1.6.0",
-    "jQuery": "~1.7.4",
+    "insert-css": "~0.1.1",
+    "brfs": "~1.1.1",
     "jquery": "~2.1.1"
   },
   "devDependencies": {

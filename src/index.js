@@ -20,16 +20,18 @@ var _parser = function(images, callback) {
       if (this.status == 200) {
         baked = baker(this.response);
         badge.assertion = JSON.parse( 
-          $.parseHTML( baked.textChunks['openbadges'].toString() )
+          $.parseHTML( baked.textChunks['openbadges'].toString() );
         );
         badge.image = i.src;
         badge.el = i;
-        if (callback) callback(badge)
+        if (callback) {
+          callback(badge);
+        }
       }
     }
 
     xhr.send();
-  })
+  });
 
 }
 

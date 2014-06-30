@@ -15,48 +15,49 @@ var _parser = function(images, callback) {
     xhr.onload = function(e) {
       if (this.status == 200) {
         var baked = baker(this.response);
-        var assertionText = baked.textChunks['openbadges'].toString();
-        if (document) {
-          // this is the only way I've been able to get JSON to parse the assertion
-          var el = document.createElement('div');
-          el.innerHTML = assertionText;
-          assertionText = el.innerHTML;
-        }
-        var assertion = JSON.parse(assertionText);
-        badge.assertion = assertion;
+        badge.assertion = JSON.parse( 
+          $.parseHTML( baked.textChunks['openbadges'].toString() )
+        );
         badge.image = i.src;
         badge.el = i;
         if (callback) callback(badge)
       }
     }
+
     xhr.send();
   })
 
 }
 
 var ParseBadges = function() {
-  if ((arguments.length == 2)
-      && (typeof(arguments[0]) == 'object')
-      && (typeof(arguments[1]) == 'function')) {
-    _parser(arguments[0], arguments[1])
+  var cb = null;
+  var imgs = [];
+  var args = arguments.length;
+
+  if (args < 0 || args > 2) {
+    throw("usage: ParseBadges(images, callback) or ParseBadges() if used as a browser script");
+    return;
   }
-  else if ((arguments.length == 1) && (typeof(arguments[0]) == 'function')) {
-    var images = [];
-    if (document) {
-      images = document.getElementsByTagName("img");
-    }
-    _parser(images, arguments[0]);
-  } else if (arguments.length == 0 && document) {
-    var images = document.getElementsByTagName("img");
-    _parser(images);
+
+  if (args == 2) {
+    imgs = arguments[0];
+    cb = arguments[1];
   }
   else {
-    throw("usage: ParseBadges(images, callback) or ParseBadges() if used as a browser script");
+    imgs = $(document).find('img');
+
+    if (args == 1) {
+      cb = arguments[0];
+    }
   }
+
+  _parser(imgs, cb);
 }
 
 module.exports.ParseBadges = ParseBadges;
-if (document) {
-  window.ParseBadges = ParseBadges;
-  ParseBadges();
-}
+$(document).ready(
+  function() {
+    window.ParseBadges = ParseBadges;
+    ParseBadges();
+  }
+);

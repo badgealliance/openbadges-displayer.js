@@ -4,17 +4,21 @@ var $ = require('jquery');
 
 
 var _parser = function(images, callback) {
+  var badge = {};
+  var xhr = null;
+  var baked = null;
+
   _.each(images, function(i) {
     console.log("loading ", i.src);
 
-    var badge = {}
-    var xhr = new XMLHttpRequest();
+    badge = {}
+    xhr = new XMLHttpRequest();
     
     xhr.open('GET', i.src, true);
     xhr.responseType = 'arraybuffer';
     xhr.onload = function(e) {
       if (this.status == 200) {
-        var baked = baker(this.response);
+        baked = baker(this.response);
         badge.assertion = JSON.parse( 
           $.parseHTML( baked.textChunks['openbadges'].toString() )
         );

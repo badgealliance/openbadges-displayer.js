@@ -9,6 +9,7 @@ var _parser = function(images, callback) {
   var badge = {};
   var xhr = null;
   var baked = null;
+  var json = null;
 
   _.each(images, function(i) {
     console.log("loading ", i.src);
@@ -21,9 +22,16 @@ var _parser = function(images, callback) {
     xhr.onload = function(e) {
       if (this.status == 200) {
         baked = baker(this.response);
-        badge.assertion = JSON.parse( 
-          $.parseHTML( baked.textChunks['openbadges'].toString() )
+
+        // Strip non-ascii characters.
+        // Using regex found here: http://stackoverflow.com/a/20856252
+        json = baked.textChunks['openbadges'].replace(
+          /[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g,
+          ''
         );
+        
+        badge.assertion = JSON.parse(json);
+
         badge.image = i.src;
         badge.el = i;
         if (callback) {

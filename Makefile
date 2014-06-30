@@ -26,6 +26,6 @@ server:
 	static .
 
 devserver:
-	beefy --cwd resources ../src/index.js:build/openbadgesDisplay.js --live -- --transform brfs
+	./node_modules/.bin/beefy --cwd resources ../src/index.js:build/openbadgesDisplay.js --live -- --transform brfs
 
 .PHONY: build buildDev server run devserver demoDeploy

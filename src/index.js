@@ -2,7 +2,7 @@ var baker = require('../vendor/png-baker');
 var _ = require('underscore');
 var fs = require('fs');
 var insertCss = require('insert-css');
-var css = fs.readFileSync(__dirname + '/badgeFlip.css');
+var css = fs.readFileSync(__dirname + '/badgeRollover.css');
 var $ = require('jquery');
 
 function MozBadgeParser() {
@@ -48,6 +48,11 @@ function MozBadgeParser() {
   }
 }
 
+MozBadgeParser.prototype.addRollovers = function() {
+  $(this.selector).wrap('<div class="moz-open-badge-thumb"></div>');
+  $('.moz-open-badge-thumb').append('<img class="badgeLogo" src="badgelogo.png" alt="Badge logo">');
+}
+
 var ParseBadges = function() {
   var self = this;
   self.parser = new MozBadgeParser;
@@ -74,11 +79,13 @@ var ParseBadges = function() {
   }
 
   self.parser.parse();
+  self.parser.addRollovers();
 }
 
 module.exports.ParseBadges = ParseBadges;
 $(document).ready(
   function() {
     window.ParseBadges = ParseBadges;
+    insertCss(css);
   }
 );

@@ -13,7 +13,7 @@ demoDeploy: buildDemoSite
 build:
 	rm -rf build
 	mkdir build
-	./node_modules/.bin/browserify ./src/index.js -o build/openbadgesDisplay.js
+	./node_modules/.bin/browserify --transform brfs ./src/index.js -o build/openbadgesDisplay.js
 
 buildDemoSite: build
 	rm -rf demoSite
@@ -26,6 +26,6 @@ server:
 	static .
 
 devserver:
-	beefy --cwd resources ../src/index.js:build/openbadgesDisplay.js --live
+	beefy --cwd resources ../src/index.js:build/openbadgesDisplay.js --live -- --transform brfs
 
 .PHONY: build buildDev server run devserver demoDeploy

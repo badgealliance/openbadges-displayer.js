@@ -1,7 +1,9 @@
 var baker = require('../vendor/png-baker');
 var _ = require('underscore');
+var fs = require('fs');
+var insertCss = require('insert-css');
+var css = fs.readFileSync(__dirname + '/badgeFlip.css');
 var $ = require('jquery');
-
 
 var _parser = function(images, callback) {
   var badge = {};
@@ -64,6 +66,6 @@ module.exports.ParseBadges = ParseBadges;
 $(document).ready(
   function() {
     window.ParseBadges = ParseBadges;
-    ParseBadges();
+    //ParseBadges();
   }
 );

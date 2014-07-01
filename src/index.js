@@ -1,71 +1,91 @@
-var baker = require('../vendor/png-baker')
-var _ = require('underscore')
-var fs = require('fs')
-var insertCss = require('insert-css')
-var css = fs.readFileSync(__dirname + '/badgeFlip.css')
-var $ = require('jquery')
+var baker = require('../vendor/png-baker');
+var _ = require('underscore');
+var fs = require('fs');
+var insertCss = require('insert-css');
+var css = fs.readFileSync(__dirname + '/badgeRollover.css');
+var $ = require('jquery');
 
-var _parser = function(images, callback) {
-  _.each(images, function(i) {
-    var badge = {}
-    console.log("loading ", i.src)
-    var xhr = new XMLHttpRequest()
-    xhr.open('GET', i.src, true)
-    xhr.responseType = 'arraybuffer'
-    xhr.onload = function(e) {
-      if (this.status == 200) {
-        var baked = baker(this.response)
-        var assertionText = baked.textChunks['openbadges'].toString()
-        if (document) {
-          // this is the only way I've been able to get JSON to parse the assertion
-          var el = document.createElement('div')
-          el.innerHTML = assertionText
-          assertionText = el.innerHTML
+function MozBadgeParser() {
+  this.selector = 'img.moz-open-badge';
+
+  this.parse = function() {
+    var badge = {};
+    var xhr = null;
+    var baked = null;
+    var json = null;
+
+    _.each(self.elems, function(i) {
+      console.log("loading ", i.src);
+
+      badge = {}
+      xhr = new XMLHttpRequest();
+      
+      xhr.open('GET', i.src, true);
+      xhr.responseType = 'arraybuffer';
+      xhr.onload = function(e) {
+        if (this.status == 200) {
+          baked = baker(this.response);
+
+          // Strip non-ascii characters.
+          // Using regex found here: http://stackoverflow.com/a/20856252
+          json = baked.textChunks['openbadges'].replace(
+            /[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g,
+            ''
+          );
+          
+          badge.assertion = JSON.parse(json);
+
+          badge.image = i.src;
+          badge.el = i;
+          if (self.cb) {
+            self.cb(badge);
+          }
         }
-        var assertion = JSON.parse(assertionText)
-        badge.assertion = assertion
-        badge.image = i.src
-        badge.el = i
-        if (callback) callback(badge)
       }
-    }
-    xhr.send()
-  })
 
+      xhr.send();
+    });
+  }
+}
+
+MozBadgeParser.prototype.addRollovers = function() {
+  $(this.selector).wrap('<div class="moz-open-badge-thumb"></div>');
+  $('.moz-open-badge-thumb').append('<img class="badgeLogo" src="badgelogo.png" alt="Badge logo">');
 }
 
 var ParseBadges = function() {
-  if ((arguments.length == 2)
-      && (typeof(arguments[0]) == 'object')
-      && (typeof(arguments[1]) == 'function')) _parser(arguments[0], arguments[1])
-  else if ((arguments.length == 1) && (typeof(arguments[0]) == 'function')) {
-    var images = []
-    if (document) {
-      images = document.getElementsByTagName("img")
-    }
-    _parser(images, arguments[0])
-  } else if (arguments.length == 0 && document) {
-    var images = document.getElementsByTagName("img")
-    _parser(images)
+  var self = this;
+  self.parser = new MozBadgeParser;
+
+  self.cb = null;
+  self.elems = [];
+  self.args = arguments.length;
+
+  if (self.args < 0 || self.args > 2) {
+    throw("usage: ParseBadges(images, callback) or ParseBadges() if used as a browser script");
+    return;
   }
-  else throw("usage: ParseBadges(images, callback) or ParseBadges() if used as a browser script")
+
+  if (args == 2) {
+    self.elems = arguments[0];
+    self.cb = arguments[1];
+  }
+  else {
+    self.elems = $(document).find(self.parser.selector);
+
+    if (args == 1) {
+      self.cb = arguments[0];
+    }
+  }
+
+  self.parser.parse();
+  self.parser.addRollovers();
 }
 
-module.exports.ParseBadges = ParseBadges
-if (document) {
-  window.ParseBadges = ParseBadges
-/*  ParseBadges(function(badge) {
-    console.log("hello there")
-    console.log(badge)
-    var el = $(badge.el)
-    var newDom = $('<div class="flip-container">' +
-                   '<div class="flipper" ontouchstart="this.classList.toggle("hover");>' +
-       //            '<div class="front"><img src="' + badge.image + '"></div>' +
-                   '<div class="back">Hi There</div>' +
-                   '</div></div>')
-    el.wrap(newDom)
-    insertCss(css)
-
-    console.log(el)
-  }) */
-}
+module.exports.ParseBadges = ParseBadges;
+$(document).ready(
+  function() {
+    window.ParseBadges = ParseBadges;
+    insertCss(css);
+  }
+);

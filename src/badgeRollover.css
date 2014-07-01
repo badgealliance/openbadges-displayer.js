@@ -1,0 +1,19 @@
+.moz-open-badge-thumb {
+  border: 10px solid #000;
+  float: left;
+  background-color: #fff;
+  position: relative;
+  margin: 0 20px 20px 0;
+}
+
+.moz-open-badge-thumb img {
+  margin: 0px;
+  padding: 0px;
+  display: block;
+}
+
+.moz-open-badge-thumb img.badgeLogo {
+  position: absolute;
+  bottom: -14px;
+  right: -15px;
+}

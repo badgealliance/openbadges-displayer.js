@@ -32,3 +32,28 @@ Uses [beefy](http://didact.us/beefy/) to run a development server. As changes ar
 `make buildDemoSite` `make demoDeploy`
 
 These two commands build and deploy the [demo site](http://cmcavoy.github.io/openbadges-displayer.js/).
+
+### Creating a new parser
+
+First, specify a selector. jquery.find is used with this selector.
+
+Second, specify some parsing rules. You can access the found elements and a callback
+function via:
+
+self.elements
+self.callback
+
+**Example:**
+
+<pre><code>
+function MyParser() {
+  this.selector = '<div>'; // Dom selector, all div elements will be found.
+
+  this.parse = function() {
+    // Parsing rules
+  }
+}
+</pre></code>
+
+**MozBadgeParser** looks for elements that match *img.moz-open-badge* and gets
+meta data from found images from within the parse function.

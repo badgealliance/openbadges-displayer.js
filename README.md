@@ -15,19 +15,23 @@ _Current Status_: If you include the libary in the page, badges will be unbaked 
 
 Clone this repo.
 
-> git clone <url> openbadges-displayer.js
+`git clone <url> openbadges-displayer.js`
 
-> cd openbadges-displayer.js
+Change to the new directory.
 
-Install requirements and run the server.
+`cd openbadges-displayer.js`
 
-> npm install
+Install requirements.
 
-> gulp
+`npm install`
+
+Compile code and run server.
+
+`gulp`
 
 Go to demo url in your browser.
 
-> http://localhost:3000
+`http://localhost:3000`
 
 ## Future
 

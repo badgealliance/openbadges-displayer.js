@@ -50,36 +50,15 @@ PNGBaker.prototype = {
 
     if (chunkCRC != ourCRC)
       throw new Error("CRC mismatch for chunk type " + chunkType);
-    console.log(chunkType);
+
     if (chunkType == 'tEXt')
       this._readTextChunk(chunkBytes);
-    else if (chunkType == 'iTXt')
-      this._readiTxtChunk(chunkBytes);
     else this._chunks.push({
       type: chunkType,
       data: chunkBytes
     });
 
     return i - byteOffset;
-  },
-  _readiTxtChunk: function(bytes) {
-    var keyword, text;
-    /* todo - also parse compression_flag, compression_method,
-     language_tag, translated_keyword http://www.w3.org/TR/PNG/#11iTXt
-    */
-    var nullsEncountered = 0;
-    for (var i = 0; i < bytes.length; i++)
-      if (bytes[i] == 0 && nullsEncountered == 0) {
-        keyword = this._arrayToStr([].slice.call(bytes, 0, i));
-        nullsEncountered++;
-      } else if (bytes[i] == 0 && nullsEncountered == 3) {
-        text = this._arrayToStr([].slice.call(bytes, i+1));
-        break;
-      } else if (bytes[i] == 0) {
-        nullsEncountered++;
-      }
-    if (!keyword) throw new Error("malformed iTXt chunk");
-    this.textChunks[keyword] = text;
   },
   _readTextChunk: function(bytes) {
     var keyword, text;
@@ -97,7 +76,7 @@ PNGBaker.prototype = {
       return String.fromCharCode(charCode);
     }).join('');
   },
-  // http://stackoverflow.com/a/7261048
+  // http://stackoverflow.com/a/7261048  
   _strToArray: function(byteString) {
     var buffer = new ArrayBuffer(byteString.length);
     var bytes = new Uint8Array(buffer);
@@ -106,7 +85,7 @@ PNGBaker.prototype = {
       bytes[i] = byteString.charCodeAt(i);
     return bytes;
   },
-  // http://stackoverflow.com/a/7261048
+  // http://stackoverflow.com/a/7261048  
   _dataURLtoBuffer: function(url) {
     // convert base64 to raw binary data held in a string
     // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code
@@ -189,5 +168,3 @@ PNGBaker.prototype = {
     return new Blob(parts, {type: 'image/png'});
   }
 };
-
-module.exports = PNGBaker;

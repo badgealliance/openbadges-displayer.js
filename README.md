@@ -21,7 +21,7 @@ library and submit pull requests with new features. Get started by picking up an
 [issue](http://github.com/cmcavoy/openbadges-displayer.js/issues), or filing
 [bug](http://github.com/cmcavoy/openbadges-displayer.js/issues).
 
-### installation
+### Installation
 
 Clone this repo.
 
@@ -43,22 +43,22 @@ Go to demo url in your browser.
 
 `http://localhost:3000`
 
-Compiling creates the directory `openbadges-displayer.js/dist/demo` and the
-files `openbadges-displayer.js/dist/openbadges-displayer.min.js`
-`openbadges-displayer.js/dist/OpenBadgesDisplayer.js`
+### Compiling
 
-Compiled code is built from files found in the `assets` folder.
+Compiling creates the directory __openbadges-displayer.js/dist/demo__ and the
+files __openbadges-displayer.js/dist/openbadges-displayer.min.js__
+__openbadges-displayer.js/dist/OpenBadgesDisplayer.js__
 
-Specifically, the demo is compiled from the `assets/client` and `assets/server`
+The demo is compiled from the `assets/client` and `assets/server`
 folders.
 
-Gulp uses browserify and uglify to create `openbadges-displayer.min.js` and
-`OpenBadgesDisplayer.js` which are compiled
-from `assets/src/OpenBadgesDisplayer.coffee` and its requirements
-(`assets/vendor/png-baker.js`, jQuery and underscore).
+Gulp uses browserify and uglify to create __openbadges-displayer.min.js__ and
+__OpenBadgesDisplayer.js__ which are compiled
+from __assets/src/OpenBadgesDisplayer.coffee__ and its requirements:
 
- the compiled and minified versions of
-`assets/src/OpenBadgesdisplayer.coffee` and its requirements.
+* __assets/vendor/png-baker.js__
+* __jQuery__
+* __underscore__
 
 ## Future
 

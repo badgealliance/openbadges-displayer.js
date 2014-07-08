@@ -21,6 +21,7 @@ paths =
     coffee:path.join 'assets', 'src'
     templates:path.join clientAssets, 'templates'
     images:path.join clientAssets, 'imgs'
+  vendor:path.join assets, 'vendor'
   server:coffee:path.join serverAssets, 'coffee'
   dist:demo:path.join 'dist', 'demo'
   public: path.join 'dist', 'demo', 'public'
@@ -58,8 +59,6 @@ gulp.task 'client_coffee', ()->
   ).pipe(
     rename("openbadges-displayer.min.js")
   ).pipe(
-    uglify()
-  ).pipe(
     gulp.dest("./dist")
   )
 
@@ -78,6 +77,17 @@ gulp.task 'copy_templates', ()->
     )
   )
 
+# copy vendor js
+gulp.task 'copy_vendor_js', ()->
+  # Copy index file
+  return gulp.src(
+    path.join paths.vendor,'*.js'
+  ).pipe(
+    gulp.dest(
+      'dist'
+    )
+  )
+
 # copy images
 gulp.task 'copy_images', ()->
   # Copy index file
@@ -91,7 +101,7 @@ gulp.task 'copy_images', ()->
 
 gulp.task('compile_coffee', ['server_coffee', 'client_coffee']);
 
-gulp.task 'runserver', ['compile_coffee', 'copy_templates', 'copy_images', 'watch_server', 'watch_client'], ()->
+gulp.task 'runserver', ['compile_coffee', 'copy_templates', 'copy_vendor_js', 'copy_images', 'watch_server', 'watch_client'], ()->
   return gulp.src(
     './dist/demo/server.js'
   ).pipe(

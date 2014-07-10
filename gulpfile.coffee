@@ -10,8 +10,6 @@ minified_filename = 'openbadges-displayer.min.js'
 
 
 # Define paths
-
-
 assets = path.join '.', 'assets'
 clientAssets = path.join assets, 'client'
 serverAssets = path.join assets, 'server'
@@ -63,6 +61,7 @@ gulp.task 'client_coffee', ()->
     gulp.dest './dist'
   )
 
+# watch less files
 gulp.task 'watch_less', ()->
   gulp.watch path.join(paths.client.less, '*.less'), ['less']
 

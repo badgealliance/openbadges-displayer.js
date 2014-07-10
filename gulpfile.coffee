@@ -2,9 +2,9 @@ gulp = require 'gulp'
 expressService = require 'gulp-express-service'
 coffee = require 'gulp-coffee'
 path = require 'path'
+browserify = require 'gulp-browserify'
 uglify = require 'gulp-uglify'
 rename = require 'gulp-rename'
-browserify = require 'gulp-browserify'
 minified_filename = 'openbadges-displayer.min.js'
 
 
@@ -52,6 +52,10 @@ gulp.task 'client_coffee', ()->
   ).pipe(
     coffee()
   ).pipe(
+    browserify()
+  ).pipe(
+    uglify()
+  ).pipe(
     rename 'openbadges-displayer.min.js'
   ).pipe(
     gulp.dest './dist'
@@ -69,17 +73,6 @@ gulp.task 'copy_templates', ()->
   ).pipe(
     gulp.dest(
       paths.public
-    )
-  )
-
-# copy vendor js
-gulp.task 'copy_vendor_js', ()->
-  # Copy index file
-  return gulp.src(
-    path.join paths.vendor,'*.js'
-  ).pipe(
-    gulp.dest(
-      'dist'
     )
   )
 
@@ -105,7 +98,7 @@ gulp.task 'copy_images', ()->
 
 gulp.task 'compile_coffee', ['server_coffee', 'client_coffee']
 
-gulp.task 'runserver', ['compile_coffee', 'copy_templates', 'copy_vendor_js', 'copy_css', 'copy_images', 'watch_server', 'watch_client'], ()->
+gulp.task 'runserver', ['compile_coffee', 'copy_templates', 'copy_css', 'copy_images', 'watch_server', 'watch_client'], ()->
   return gulp.src(
     './dist/demo/server.js'
   ).pipe(

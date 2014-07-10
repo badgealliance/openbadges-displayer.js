@@ -50,7 +50,7 @@ PNGBaker.prototype = {
 
     if (chunkCRC != ourCRC)
       throw new Error("CRC mismatch for chunk type " + chunkType);
-
+    console.log(chunkType);
     if (chunkType == 'tEXt')
       this._readTextChunk(chunkBytes);
     else if (chunkType == 'iTXt')
@@ -189,3 +189,5 @@ PNGBaker.prototype = {
     return new Blob(parts, {type: 'image/png'});
   }
 };
+
+module.exports = PNGBaker;

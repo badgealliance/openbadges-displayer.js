@@ -1,4 +1,5 @@
 (()->
+  PNGBaker = require '../vendor/png-baker.js'
   previousOBD = @obd
   breaker = {}
   

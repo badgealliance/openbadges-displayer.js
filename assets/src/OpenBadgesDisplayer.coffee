@@ -25,11 +25,20 @@
 
   # methods
   obd.init = () ->
+
+    @disable_debug()
+
     @insert_css()
     @badges = []
     @load_images()
     @parse_meta_data()
-    @display_badges()
+
+  obd.eneable_debug = () ->
+    console.log = @old_logger
+
+  obd.disable_debug = () ->
+    @old_logger = console.log
+    console.log = () ->
 
   obd.insert_css = () ->
     link = document.createElement 'link'
@@ -50,32 +59,35 @@
       self.parse_badge img
 
   obd.parse_badge = (img) ->
-    @xhr = new XMLHttpRequest()
-    @xhr.open 'GET', img.src, true
-    @xhr.responseType = 'arraybuffer'
+    xhr = new XMLHttpRequest()
+    xhr.open 'GET', img.src, true
+    xhr.responseType = 'arraybuffer'
     
-    @xhr.onload = () =>
-      if @xhr.status is 200
-        baked = PNGBaker @xhr.response
+    xhr.onload = () =>
+      if xhr.status is 200
+        try
+          baked = PNGBaker xhr.response
 
-        # Strip non-ascii characters.
-        # Using regex found here: http://stackoverflow.com/a/20856252
-        assertion = JSON.parse baked.textChunks['openbadges'].replace(
-          /[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g,
-          ''
-        )
-        
-        @badges.push {
-          assertion : assertion
-          img: img
-        }
+          # Strip non-ascii characters.
+          # Using regex found here: http://stackoverflow.com/a/20856252
+          assertion = JSON.parse baked.textChunks['openbadges'].replace(
+            /[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g,
+            ''
+          )
 
-        @display_badge assertion, img
+          @badges.push {
+            assertion : assertion
+            img: img
+          }
 
-    @xhr.ontimeout = () -> console.error "The xhr request timed out."
-    @xhr.onerror = () -> console.log 'error getting badge data'
+          @display_badge assertion, img
 
-    @xhr.send null
+        catch error
+
+    xhr.ontimeout = () -> console.error "The xhr request timed out."
+    xhr.onerror = () -> console.log 'error getting badge data'
+
+    xhr.send null
 
   obd.display_badge = (assertion, img) ->
     badgeTitle = assertion.badge.name
@@ -112,14 +124,8 @@
 
     newDiv.appendChild newImg
     newDiv.appendChild newSpan
-
     img.parentNode.insertBefore newDiv, img
     newDiv.appendChild img
-
-
-  obd.display_badges = () ->
-    for badge in @badges
-      console.log badge
 
   return obd.init()
 ).call(@)

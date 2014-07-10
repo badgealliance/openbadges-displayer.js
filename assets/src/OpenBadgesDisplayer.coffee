@@ -95,7 +95,7 @@
     height = 100
 
     newDiv = document.createElement 'div'
-    newImg = document.createElement 'img'
+    newImg = document.createElement 'div'
     newSpan = document.createElement 'span'
     newStrong = document.createElement 'strong'
     newP = document.createElement 'p'
@@ -104,8 +104,6 @@
     newDiv.setAttribute 'class', 'open-badge-thumb'
     newImg.setAttribute 'class', 'badgeLogo'
     newStrong.setAttribute 'class', 'badgeTitle'
-    newImg.setAttribute 'src', '/imgs/badgelogo.png'
-    newImg.setAttribute 'alt', 'Badge logo'
     newSpan.setAttribute 'class', 'ob-info'
     newA.setAttribute 'href', '#'
 

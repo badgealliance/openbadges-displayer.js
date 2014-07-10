@@ -7,6 +7,7 @@ uglify = require 'gulp-uglify'
 minifyCSS = require 'gulp-minify-css'
 rename = require 'gulp-rename'
 less = require 'gulp-less'
+base64 = require 'gulp-base64'
 minified_filename = 'openbadges-displayer.min.js'
 
 
@@ -97,6 +98,8 @@ gulp.task 'less', () ->
     path.join paths.client.less, '*.less'
   ).pipe(
     less()
+  ).pipe(
+    base64()
   ).pipe(
     minifyCSS()
   ).pipe(

@@ -27,21 +27,16 @@ library and submit pull requests with new features. Get started by picking up an
 
 ### Installation
 
-Clone this repo.
-
-`git clone <url> openbadges-displayer.js`
-
-Change to the new directory.
-
-`cd openbadges-displayer.js`
-
-To install requirements, compile code and run the demo server:
+After cloning this repo:
 
 `npm start`
 
-Requirements will only install once unless they change.
+This will install requirements and then use gulp to compile the code and
+run the server. Requirements will only install once unless they change.
 
-Go to demo url in your browser.
+### Viewing the demo
+
+In your browser, go to:
 
 `http://localhost:3000`
 

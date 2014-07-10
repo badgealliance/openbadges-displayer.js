@@ -31,13 +31,11 @@ Change to the new directory.
 
 `cd openbadges-displayer.js`
 
-Install requirements.
+To install requirements, compile code and run the demo server:
 
-`npm install`
+`npm start`
 
-Compile code and run server.
-
-`gulp`
+Requirements will only install once unless they change.
 
 Go to demo url in your browser.
 
@@ -46,14 +44,17 @@ Go to demo url in your browser.
 ### Compiling
 
 Compiling creates the directory __openbadges-displayer.js/dist/demo__ and the
-file __openbadges-displayer.js/dist/openbadges-displayer.min.js__
+files __openbadges-displayer.js/dist/openbadges-displayer.min.js__ and
+__openbadges-displayer.js/dist/openbadges-displayer.min.css__
 
 The demo is compiled from the `assets/client` and `assets/server`
 folders.
 
 Gulp uses browserify and uglify to create __openbadges-displayer.min.js__ which
 is compiled from __assets/src/OpenBadgesDisplayer.coffee__ and its requirement,
-* __assets/vendor/png-baker.js__
+__assets/vendor/png-baker.js__
+
+__openbadges-displayer.min.css__ is compiled with gulp-minify-css and gulp-less.
 
 ## Future
 

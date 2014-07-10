@@ -1,136 +1,144 @@
-(()->
-  PNGBaker = require '../vendor/png-baker.js'
-  previousOBD = @obd
-  breaker = {}
-  
-  obd = (obj)->
-    if obj instanceof obd
-      return obj
+OpenBadgesDisplayer = (
+  ()->
+    path = require 'path'
+    insertCss = require 'insert-css'
+    fs = require 'fs'
+    PNGBaker = require '../vendor/png-baker.js'
+    css = fs.readFileSync __dirname + '/../../dist/openbadges-displayer.min.css'
+    previousOBD = @obd
+    breaker = {}
     
-    if @ not instanceof obd
-      return new obd obj
+    obd = (obj)->
+      if obj instanceof obd
+        return obj
+      
+      if @ not instanceof obd
+        return new obd obj
 
-    @_wrapped = obj
+      @_wrapped = obj
 
-  # export for node
-  if typeof exports is not 'undefined'
-    if typeof module is not 'undefined' and module.exports
-      exports = module.exports = obd
-    
-    exports.obd = obd
-  else
-    @obd = obd
+    # export for node
+    if typeof exports is not 'undefined'
+      if typeof module is not 'undefined' and module.exports
+        exports = module.exports = obd
+      
+      exports.obd = obd
+    else
+      @obd = obd
 
-  obd.VERSION = '0.0.1'
+    obd.VERSION = '0.0.1'
 
-  # methods
-  obd.init = () ->
+    # methods
+    obd.init = () ->
+      @disable_debug()
 
-    @disable_debug()
+      @insert_css()
+      @badges = []
+      @load_images()
+      @parse_meta_data()
 
-    @insert_css()
-    @badges = []
-    @load_images()
-    @parse_meta_data()
+    obd.eneable_debug = () ->
+      console.log = @old_logger
 
-  obd.eneable_debug = () ->
-    console.log = @old_logger
+    obd.disable_debug = () ->
+      @old_logger = console.log
+      console.log = () ->
 
-  obd.disable_debug = () ->
-    @old_logger = console.log
-    console.log = () ->
+    obd.insert_css = () ->
+      console.log 'Inserting css'
+      insertCss css
 
-  obd.insert_css = () ->
-    link = document.createElement 'link'
-    link.href = '/css/openbadges.css'
-    link.type = 'text/css'
-    link.rel = 'stylesheet'
-    document.getElementsByTagName('head')[0].appendChild link
+    obd.load_images = () ->
+      console.log 'Loading images'
+      @images = document.getElementsByTagName 'img'
 
-  obd.load_images = () ->
-    @images = document.getElementsByTagName 'img'
+    obd.parse_meta_data = () ->
+      console.log 'Parsing meta data'
+      xhr = null
+      self = @
 
-  obd.parse_meta_data = () ->
-    xhr = null
-    console.log 'parsing meta data'
-    self = @
+      for img in self.images
+        self.parse_badge img
 
-    for img in self.images
-      self.parse_badge img
+    obd.parse_badge = (img) ->
+      console.log 'Parse badge'
 
-  obd.parse_badge = (img) ->
-    xhr = new XMLHttpRequest()
-    xhr.open 'GET', img.src, true
-    xhr.responseType = 'arraybuffer'
-    
-    xhr.onload = () =>
-      if xhr.status is 200
-        try
-          baked = PNGBaker xhr.response
+      xhr = new XMLHttpRequest()
+      xhr.open 'GET', img.src, true
+      xhr.responseType = 'arraybuffer'
+      
+      xhr.onload = () =>
+        if xhr.status is 200
+          try
+            baked = PNGBaker xhr.response
 
-          # Strip non-ascii characters.
-          # Using regex found here: http://stackoverflow.com/a/20856252
-          assertion = JSON.parse baked.textChunks['openbadges'].replace(
-            /[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g,
-            ''
-          )
+            # Strip non-ascii characters.
+            # Using regex found here: http://stackoverflow.com/a/20856252
+            assertion = JSON.parse baked.textChunks['openbadges'].replace(
+              /[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g,
+              ''
+            )
 
-          @badges.push {
-            assertion : assertion
-            img: img
-          }
+            @badges.push {
+              assertion : assertion
+              img: img
+            }
 
-          @display_badge assertion, img
+            @display_badge assertion, img
 
-        catch error
+          catch error
 
-    xhr.ontimeout = () -> console.error "The xhr request timed out."
-    xhr.onerror = () -> console.log 'error getting badge data'
+      xhr.ontimeout = () -> console.error "The xhr request timed out."
+      xhr.onerror = () -> console.log 'error getting badge data'
 
-    xhr.send null
+      xhr.send null
 
-  obd.display_badge = (assertion, img) ->
-    badgeTitle = assertion.badge.name
-    badgeInfo = assertion.badge.description
-    height = 100
+    obd.display_badge = (assertion, img) ->
+      console.log 'Display badge'
 
-    newDiv = document.createElement 'div'
-    newImg = document.createElement 'div'
-    newImgWrapper = document.createElement 'div'
-    newSpan = document.createElement 'span'
-    newStrong = document.createElement 'strong'
-    newP = document.createElement 'p'
-    newA = document.createElement 'a'
+      badgeTitle = assertion.badge.name
+      badgeInfo = assertion.badge.description
+      height = 100
 
-    newDiv.setAttribute 'class', 'open-badge-thumb'
-    newImgWrapper.setAttribute 'class', 'ob-badge-logo-wrapper'
-    newImg.setAttribute 'class', 'ob-badge-logo'
-    newStrong.setAttribute 'class', 'ob-badge-title'
-    newSpan.setAttribute 'class', 'ob-info'
-    newA.setAttribute 'href', '#'
+      newDiv = document.createElement 'div'
+      newImg = document.createElement 'div'
+      newImgWrapper = document.createElement 'div'
+      newSpan = document.createElement 'span'
+      newStrong = document.createElement 'strong'
+      newP = document.createElement 'p'
+      newA = document.createElement 'a'
 
-    badgeTitle = document.createTextNode badgeTitle
-    badgeInfo = document.createTextNode badgeInfo
-    link = document.createTextNode '[more]'
+      newDiv.setAttribute 'class', 'open-badge-thumb'
+      newImgWrapper.setAttribute 'class', 'ob-badge-logo-wrapper'
+      newImg.setAttribute 'class', 'ob-badge-logo'
+      newStrong.setAttribute 'class', 'ob-badge-title'
+      newSpan.setAttribute 'class', 'ob-info'
+      newA.setAttribute 'href', '#'
 
-    newA.appendChild link
+      badgeTitle = document.createTextNode badgeTitle
+      badgeInfo = document.createTextNode badgeInfo
+      link = document.createTextNode '[more]'
 
-    newStrong.appendChild badgeTitle
-    
-    newP.appendChild newStrong
-    newP.appendChild badgeInfo
-    newP.appendChild newA
+      newA.appendChild link
 
-    newImgWrapper.appendChild newImg
+      newStrong.appendChild badgeTitle
+      
+      newP.appendChild newStrong
+      newP.appendChild badgeInfo
+      newP.appendChild newA
 
-    newSpan.appendChild newP
-    newSpan.appendChild newImgWrapper
-    
-    newDiv.appendChild newSpan
-    
-    img.parentNode.insertBefore newDiv, img
-    
-    newDiv.appendChild img
+      newImgWrapper.appendChild newImg
 
-  return obd.init()
+      newSpan.appendChild newP
+      newSpan.appendChild newImgWrapper
+      
+      newDiv.appendChild newSpan
+      
+      img.parentNode.insertBefore newDiv, img
+      
+      newDiv.appendChild img
+
+    return obd.init()
 ).call(@)
+
+module.exports.OpenBadgesDisplayer = OpenBadgesDisplayer

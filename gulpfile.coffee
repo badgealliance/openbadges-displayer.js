@@ -8,7 +8,6 @@ minifyCSS = require 'gulp-minify-css'
 rename = require 'gulp-rename'
 less = require 'gulp-less'
 base64 = require 'gulp-base64'
-minified_filename = 'openbadges-displayer.min.js'
 
 
 # Define paths
@@ -27,7 +26,7 @@ paths =
   server:coffee:path.join serverAssets
   dist:demo:path.join 'dist', 'demo'
   public: path.join 'dist', 'demo', 'public'
-  public_css: path.join 'dist', 'css'
+  public_css: path.join 'dist'
   public_images: path.join 'dist', 'demo', 'imgs'
   compiled_js: path.join 'dist', 'js'
   public_js: path.join 'dist', 'demo', 'public', 'js'
@@ -48,13 +47,15 @@ gulp.task 'watch_server', ()->
   gulp.watch path.join(paths.server.coffee, '*.coffee'), ['server_coffee']
 
 # run gulp-coffee on client files
-gulp.task 'client_coffee', ()->
+gulp.task 'client_coffee', ['less'], ()->
   return gulp.src(
     path.join paths.client.coffee, '*.coffee'
   ).pipe(
     coffee()
   ).pipe(
-    browserify()
+    browserify {
+      transform:['brfs']
+    }
   ).pipe(
     uglify()
   ).pipe(
@@ -65,7 +66,7 @@ gulp.task 'client_coffee', ()->
 
 # watch less files
 gulp.task 'watch_less', ()->
-  gulp.watch path.join(paths.client.less, '*.less'), ['less']
+  gulp.watch path.join(paths.client.less, '*.less'), ['client_coffee']
 
 # watch client files for changes
 gulp.task 'watch_client', ()->
@@ -103,6 +104,8 @@ gulp.task 'less', () ->
   ).pipe(
     minifyCSS()
   ).pipe(
+    rename 'openbadges-displayer.min.css'
+  ).pipe(
     gulp.dest(
       paths.public_css
     )
@@ -110,7 +113,7 @@ gulp.task 'less', () ->
 
 gulp.task 'compile_coffee', ['server_coffee', 'client_coffee']
 
-gulp.task 'runserver', ['compile_coffee', 'copy_templates', 'less', 'copy_images', 'watch_less', 'watch_server', 'watch_client'], ()->
+gulp.task 'runserver', ['copy_templates', 'compile_coffee', 'copy_images', 'watch_less', 'watch_server', 'watch_client'], ()->
   return gulp.src(
     './dist/demo/server.js'
   ).pipe(

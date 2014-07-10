@@ -63,10 +63,7 @@ __openbadges-displayer.min.css__ is compiled with gulp-minify-css and gulp-less.
 ## Future
 
 ### Fix requirements
-Allow png-baker to update using bower rather than as a hard requirement.
-
-Allow compiling with specific requirements rather than forcing requirements
-in build.
+Install png-baker with node rather than manually.
 
 ### Manual Unbaking
 

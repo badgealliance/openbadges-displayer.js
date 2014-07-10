@@ -4,7 +4,7 @@ app = express()
 
 app.engine 'html', require('jade').renderFile
 
-app.use '/css', express.static path.join __dirname, 'public', 'css'
+app.use '/css', express.static path.join __dirname, '..', 'css'
 app.use '/imgs', express.static path.join __dirname, 'public', 'imgs'
 app.use '/js', express.static path.join __dirname, '..'
 

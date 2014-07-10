@@ -25,7 +25,7 @@ paths =
   server:coffee:path.join serverAssets
   dist:demo:path.join 'dist', 'demo'
   public: path.join 'dist', 'demo', 'public'
-  public_css: path.join 'dist', 'demo', 'public', 'css'
+  public_css: path.join 'dist', 'css'
   public_images: path.join 'dist', 'demo', 'public', 'imgs'
   compiled_js: path.join 'dist', 'js'
   public_js: path.join 'dist', 'demo', 'public', 'js'

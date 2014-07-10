@@ -5,6 +5,7 @@ path = require 'path'
 browserify = require 'gulp-browserify'
 uglify = require 'gulp-uglify'
 rename = require 'gulp-rename'
+less = require 'gulp-less'
 minified_filename = 'openbadges-displayer.min.js'
 
 
@@ -19,6 +20,7 @@ paths =
   client:
     css:path.join clientAssets, 'css'
     coffee:path.join 'assets', 'src'
+    less:path.join 'assets', 'src'
     templates:path.join clientAssets, 'templates'
     images:path.join clientAssets, 'imgs'
   vendor:path.join assets, 'vendor'
@@ -61,6 +63,9 @@ gulp.task 'client_coffee', ()->
     gulp.dest './dist'
   )
 
+gulp.task 'watch_less', ()->
+  gulp.watch path.join(paths.client.less, '*.less'), ['less']
+
 # watch client files for changes
 gulp.task 'watch_client', ()->
   gulp.watch path.join(paths.client.coffee, '*.coffee'), ['client_coffee']
@@ -76,16 +81,6 @@ gulp.task 'copy_templates', ()->
     )
   )
 
-# copy css
-gulp.task 'copy_css', ()->
-  return gulp.src(
-    path.join paths.client.css, '*.css'
-  ).pipe(
-    gulp.dest(
-      paths.public_css
-    )
-  )
-
 # copy images
 gulp.task 'copy_images', ()->
   return gulp.src(
@@ -96,9 +91,21 @@ gulp.task 'copy_images', ()->
     )
   )
 
+# less
+gulp.task 'less', () ->
+  gulp.src(
+    path.join paths.client.less, '*.less'
+  ).pipe(
+    less()
+  ).pipe(
+    gulp.dest(
+      paths.public_css
+    )
+  )
+
 gulp.task 'compile_coffee', ['server_coffee', 'client_coffee']
 
-gulp.task 'runserver', ['compile_coffee', 'copy_templates', 'copy_css', 'copy_images', 'watch_server', 'watch_client'], ()->
+gulp.task 'runserver', ['compile_coffee', 'copy_templates', 'less', 'copy_images', 'watch_less', 'watch_server', 'watch_client'], ()->
   return gulp.src(
     './dist/demo/server.js'
   ).pipe(

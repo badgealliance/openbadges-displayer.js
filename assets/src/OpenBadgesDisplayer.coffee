@@ -97,8 +97,6 @@
     newSpan.setAttribute 'class', 'ob-info'
     newA.setAttribute 'href', '#'
 
-    newP.style.display = 'none'
-
     badgeTitle = document.createTextNode badgeTitle
     badgeInfo = document.createTextNode badgeInfo
     link = document.createTextNode '[more]'

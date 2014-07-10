@@ -90,6 +90,7 @@
 
     newDiv.setAttribute 'class', 'open-badge-thumb'
     newImg.setAttribute 'class', 'badgeLogo'
+    newStrong.setAttribute 'class', 'badgeTitle'
     newImg.setAttribute 'src', '/imgs/badgelogo.png'
     newImg.setAttribute 'alt', 'Badge logo'
     newSpan.setAttribute 'class', 'ob-info'

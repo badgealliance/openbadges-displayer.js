@@ -96,5 +96,5 @@ function MyParser() {
 }
 </pre></code>
 
-**MozBadgeParser** looks for elements that match *img.moz-open-badge* and gets
+**OpenBadgesDisplayer** looks for elements that match *img* and gets
 meta data from found images from within the parse function.

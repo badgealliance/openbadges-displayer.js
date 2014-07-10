@@ -22,9 +22,10 @@ paths =
     templates:path.join clientAssets, 'templates'
     images:path.join clientAssets, 'imgs'
   vendor:path.join assets, 'vendor'
-  server:coffee:path.join serverAssets, 'coffee'
+  server:coffee:path.join serverAssets
   dist:demo:path.join 'dist', 'demo'
   public: path.join 'dist', 'demo', 'public'
+  public_css: path.join 'dist', 'demo', 'public', 'css'
   public_images: path.join 'dist', 'demo', 'public', 'imgs'
   compiled_js: path.join 'dist', 'js'
   public_js: path.join 'dist', 'demo', 'public', 'js'
@@ -51,15 +52,9 @@ gulp.task 'client_coffee', ()->
   ).pipe(
     coffee()
   ).pipe(
-    browserify({
-      insertGlobals : true
-    })
+    rename 'openbadges-displayer.min.js'
   ).pipe(
     gulp.dest './dist'
-  ).pipe(
-    rename("openbadges-displayer.min.js")
-  ).pipe(
-    gulp.dest("./dist")
   )
 
 # watch client files for changes
@@ -88,9 +83,18 @@ gulp.task 'copy_vendor_js', ()->
     )
   )
 
+# copy css
+gulp.task 'copy_css', ()->
+  return gulp.src(
+    path.join paths.client.css, '*.css'
+  ).pipe(
+    gulp.dest(
+      paths.public_css
+    )
+  )
+
 # copy images
 gulp.task 'copy_images', ()->
-  # Copy index file
   return gulp.src(
     path.join paths.client.images,'*.png'
   ).pipe(
@@ -99,9 +103,9 @@ gulp.task 'copy_images', ()->
     )
   )
 
-gulp.task('compile_coffee', ['server_coffee', 'client_coffee']);
+gulp.task 'compile_coffee', ['server_coffee', 'client_coffee']
 
-gulp.task 'runserver', ['compile_coffee', 'copy_templates', 'copy_vendor_js', 'copy_images', 'watch_server', 'watch_client'], ()->
+gulp.task 'runserver', ['compile_coffee', 'copy_templates', 'copy_vendor_js', 'copy_css', 'copy_images', 'watch_server', 'watch_client'], ()->
   return gulp.src(
     './dist/demo/server.js'
   ).pipe(
@@ -111,4 +115,4 @@ gulp.task 'runserver', ['compile_coffee', 'copy_templates', 'copy_vendor_js', 'c
     })
   )
 
-gulp.task('default', ['runserver']);
+gulp.task 'default', ['runserver']

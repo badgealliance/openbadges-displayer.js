@@ -46,19 +46,14 @@ Go to demo url in your browser.
 ### Compiling
 
 Compiling creates the directory __openbadges-displayer.js/dist/demo__ and the
-files __openbadges-displayer.js/dist/openbadges-displayer.min.js__
-__openbadges-displayer.js/dist/OpenBadgesDisplayer.js__
+file __openbadges-displayer.js/dist/openbadges-displayer.min.js__
 
 The demo is compiled from the `assets/client` and `assets/server`
 folders.
 
-Gulp uses browserify and uglify to create __openbadges-displayer.min.js__ and
-__OpenBadgesDisplayer.js__ which are compiled
-from __assets/src/OpenBadgesDisplayer.coffee__ and its requirements:
-
+Gulp uses browserify and uglify to create __openbadges-displayer.min.js__ which
+is compiled from __assets/src/OpenBadgesDisplayer.coffee__ and its requirement,
 * __assets/vendor/png-baker.js__
-* __jQuery__
-* __underscore__
 
 ## Future
 

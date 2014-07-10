@@ -24,10 +24,18 @@
 
   # methods
   obd.init = () ->
+    @insert_css()
     @badges = []
     @load_images()
     @parse_meta_data()
     @display_badges()
+
+  obd.insert_css = () ->
+    link = document.createElement 'link'
+    link.href = '/css/openbadges.css'
+    link.type = 'text/css'
+    link.rel = 'stylesheet'
+    document.getElementsByTagName('head')[0].appendChild link
 
   obd.load_images = () ->
     @images = document.getElementsByTagName 'img'

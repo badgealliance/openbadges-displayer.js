@@ -82,7 +82,12 @@
 
     newDiv.setAttribute 'class', 'open-badge-thumb'
     newImg.setAttribute 'class', 'badgeLogo'
+    newImg.setAttribute 'src', '/imgs/badgelogo.png'
+    newImg.setAttribute 'alt', 'Badge logo'
     newSpan.setAttribute 'class', 'ob-info'
+    newA.setAttribute 'href', '#'
+
+    newP.style.display = 'none'
 
     badgeTitle = document.createTextNode badgeTitle
     badgeInfo = document.createTextNode badgeInfo

@@ -96,14 +96,16 @@
 
     newDiv = document.createElement 'div'
     newImg = document.createElement 'div'
+    newImgWrapper = document.createElement 'div'
     newSpan = document.createElement 'span'
     newStrong = document.createElement 'strong'
     newP = document.createElement 'p'
     newA = document.createElement 'a'
 
     newDiv.setAttribute 'class', 'open-badge-thumb'
-    newImg.setAttribute 'class', 'badgeLogo'
-    newStrong.setAttribute 'class', 'badgeTitle'
+    newImgWrapper.setAttribute 'class', 'ob-badge-logo-wrapper'
+    newImg.setAttribute 'class', 'ob-badge-logo'
+    newStrong.setAttribute 'class', 'ob-badge-title'
     newSpan.setAttribute 'class', 'ob-info'
     newA.setAttribute 'href', '#'
 
@@ -114,15 +116,20 @@
     newA.appendChild link
 
     newStrong.appendChild badgeTitle
+    
     newP.appendChild newStrong
     newP.appendChild badgeInfo
     newP.appendChild newA
 
-    newSpan.appendChild newP
+    newImgWrapper.appendChild newImg
 
-    newDiv.appendChild newImg
+    newSpan.appendChild newP
+    newSpan.appendChild newImgWrapper
+    
     newDiv.appendChild newSpan
+    
     img.parentNode.insertBefore newDiv, img
+    
     newDiv.appendChild img
 
   return obd.init()

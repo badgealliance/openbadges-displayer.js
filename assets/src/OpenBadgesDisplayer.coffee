@@ -39,36 +39,70 @@
 
     for img in self.images
       self.parse_badge img
-    console.log @badges
-    for b in @badges
-      console.log b.assertion
 
   obd.parse_badge = (img) ->
     @xhr = new XMLHttpRequest()
     @xhr.open 'GET', img.src, true
     @xhr.responseType = 'arraybuffer'
-
-    @xhr.onload = (e) =>
-      if @xhr.status == 200
+    
+    @xhr.onload = () =>
+      if @xhr.status is 200
         baked = PNGBaker @xhr.response
 
         # Strip non-ascii characters.
         # Using regex found here: http://stackoverflow.com/a/20856252
-        json = baked.textChunks['openbadges'].replace(
+        assertion = JSON.parse baked.textChunks['openbadges'].replace(
           /[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g,
           ''
         )
         
         @badges.push {
-          assertion:JSON.parse json,
-          image:img.src
-          obj:img
+          assertion : assertion
+          img: img
         }
-        console.log @badges
 
-    @xhr.send()
+        @display_badge assertion, img
 
-    console.log @badges
+    @xhr.ontimeout = () -> console.error "The xhr request timed out."
+    @xhr.onerror = () -> console.log 'error getting badge data'
+
+    @xhr.send null
+
+  obd.display_badge = (assertion, img) ->
+    badgeTitle = assertion.badge.name
+    badgeInfo = assertion.badge.description
+    height = 100
+
+    newDiv = document.createElement 'div'
+    newImg = document.createElement 'img'
+    newSpan = document.createElement 'span'
+    newStrong = document.createElement 'strong'
+    newP = document.createElement 'p'
+    newA = document.createElement 'a'
+
+    newDiv.setAttribute 'class', 'open-badge-thumb'
+    newImg.setAttribute 'class', 'badgeLogo'
+    newSpan.setAttribute 'class', 'ob-info'
+
+    badgeTitle = document.createTextNode badgeTitle
+    badgeInfo = document.createTextNode badgeInfo
+    link = document.createTextNode '[more]'
+
+    newA.appendChild link
+
+    newStrong.appendChild badgeTitle
+    newP.appendChild newStrong
+    newP.appendChild badgeInfo
+    newP.appendChild newA
+
+    newSpan.appendChild newP
+
+    newDiv.appendChild newImg
+    newDiv.appendChild newSpan
+
+    img.parentNode.insertBefore newDiv, img
+    newDiv.appendChild img
+
 
   obd.display_badges = () ->
     for badge in @badges

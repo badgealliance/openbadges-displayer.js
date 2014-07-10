@@ -1,3 +1,5 @@
+@transition_time: .15s;
+
 .open-badge-thumb {
   border: 10px solid #000;
   float: left;
@@ -16,6 +18,10 @@
     bottom: -14px;
     right: -15px;
     z-index: 20;
+    -webkit-transition: all @transition_time ease-in-out;
+    -moz-transition: all @transition_time ease-in-out;
+    -o-transition: all @transition_time ease-in-out;
+    transition: all @transition_time ease-in-out;
   }
 
   .ob-info {
@@ -30,6 +36,12 @@
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    max-height: 0px;
+
+    -webkit-transition: all @transition_time ease-in-out;
+    -moz-transition: all @transition_time ease-in-out;
+    -o-transition: all @transition_time ease-in-out;
+    transition: all @transition_time ease-in-out;
 
     p {
       margin: 0;
@@ -46,12 +58,8 @@
       bottom: 86px;
     }
     .ob-info {
-      height: 100px;
+      max-height: 100px;
       background-color: rgba(255,255,255,1);
-
-      p {
-        display: block !important;
-      }
     }
   }
 }

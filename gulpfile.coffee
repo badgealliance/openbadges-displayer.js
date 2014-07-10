@@ -4,6 +4,7 @@ coffee = require 'gulp-coffee'
 path = require 'path'
 browserify = require 'gulp-browserify'
 uglify = require 'gulp-uglify'
+minifyCSS = require 'gulp-minify-css'
 rename = require 'gulp-rename'
 less = require 'gulp-less'
 minified_filename = 'openbadges-displayer.min.js'
@@ -96,6 +97,8 @@ gulp.task 'less', () ->
     path.join paths.client.less, '*.less'
   ).pipe(
     less()
+  ).pipe(
+    minifyCSS()
   ).pipe(
     gulp.dest(
       paths.public_css

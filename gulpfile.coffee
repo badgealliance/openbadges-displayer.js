@@ -13,8 +13,8 @@ minified_filename = 'openbadges-displayer.min.js'
 
 # Define paths
 assets = path.join '.', 'assets'
-clientAssets = path.join assets, 'client'
-serverAssets = path.join assets, 'server'
+clientAssets = path.join assets, 'demo', 'client'
+serverAssets = path.join assets, 'demo', 'server'
 
 paths =
   client:

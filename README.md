@@ -21,6 +21,10 @@ library and submit pull requests with new features. Get started by picking up an
 [issue](http://github.com/cmcavoy/openbadges-displayer.js/issues), or filing
 [bug](http://github.com/cmcavoy/openbadges-displayer.js/issues).
 
+### Requirements
+
+[Node v0.10.29](http://nodejs.org/)
+
 ### Installation
 
 Clone this repo.

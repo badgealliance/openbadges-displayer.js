@@ -10,6 +10,7 @@ less = require 'gulp-less'
 base64 = require 'gulp-base64'
 minifyHTML = require 'gulp-minify-html'
 header = require 'gulp-header'
+coffeelint = require 'gulp-coffeelint'
 pkg = require path.join __dirname, 'package.json'
 
 banner = [
@@ -42,8 +43,17 @@ paths =
   public_js: path.join 'dist', 'demo', 'public', 'js'
   temp: 'temp'
 
+gulp.task 'lint', ()->
+  gulp.src(
+    path.join path.join '.', 'assets', '**', '*.coffee'
+  ).pipe(
+    coffeelint()
+  ).pipe(
+    coffeelint.reporter 'fail'
+  )
+
 # run gulp-coffee on server files
-gulp.task 'server_coffee', ()->
+gulp.task 'server_coffee', ['lint'], ()->
   return gulp.src(
     path.join paths.server.coffee, '*.coffee'
   ).pipe(
@@ -59,7 +69,7 @@ gulp.task 'watch_server', ()->
   gulp.watch path.join(paths.server.coffee, '*.coffee'), ['server_coffee']
 
 # run gulp-coffee on client files
-gulp.task 'client_coffee', ['less'], ()->
+gulp.task 'client_coffee', ['less', 'lint'], ()->
   return gulp.src(
     path.join paths.client.coffee, '*.coffee'
   ).pipe(

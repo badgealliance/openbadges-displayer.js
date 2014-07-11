@@ -12,6 +12,13 @@ minifyHTML = require 'gulp-minify-html'
 header = require 'gulp-header'
 pkg = require path.join __dirname, 'package.json'
 
+banner = [
+    '/*!'
+    '<%= pkg.name %> v<%= pkg.version %>'
+    ' | @license v<%= pkg.license %>'
+    '*/'].join ' '
+banner += '\n'
+
 
 # Define paths
 assets = path.join '.', 'assets'
@@ -53,13 +60,6 @@ gulp.task 'watch_server', ()->
 
 # run gulp-coffee on client files
 gulp.task 'client_coffee', ['less'], ()->
-  banner = [
-    '/*!'
-    '<%= pkg.name %>'
-    ' | @version v<%= pkg.version %>'
-    ' | @license v<%= pkg.license %>'
-    '*/'].join ' '
-  banner += '\n'
   return gulp.src(
     path.join paths.client.coffee, '*.coffee'
   ).pipe(
@@ -119,6 +119,8 @@ gulp.task 'less', () ->
     base64()
   ).pipe(
     minifyCSS()
+  ).pipe(
+    header banner, { pkg: pkg }
   ).pipe(
     rename 'openbadges-displayer.min.css'
   ).pipe(

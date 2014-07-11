@@ -8,6 +8,7 @@ minifyCSS = require 'gulp-minify-css'
 rename = require 'gulp-rename'
 less = require 'gulp-less'
 base64 = require 'gulp-base64'
+minifyHTML = require 'gulp-minify-html'
 
 
 # Define paths
@@ -38,6 +39,8 @@ gulp.task 'server_coffee', ()->
     path.join paths.server.coffee, '*.coffee'
   ).pipe(
     coffee()
+  ).pipe(
+    uglify()
   ).pipe(
     gulp.dest paths.dist.demo
   )
@@ -77,6 +80,8 @@ gulp.task 'copy_templates', ()->
   # Copy index file
   return gulp.src(
     path.join paths.client.templates,'index.html'
+  ).pipe(
+    minifyHTML()
   ).pipe(
     gulp.dest(
       paths.public

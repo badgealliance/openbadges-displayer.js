@@ -15,7 +15,7 @@ pkg = require path.join __dirname, 'package.json'
 banner = [
     '/*!'
     '<%= pkg.name %> v<%= pkg.version %>'
-    ' | @license v<%= pkg.license %>'
+    ' | @license <%= pkg.license %>'
     '*/'].join ' '
 banner += '\n'
 

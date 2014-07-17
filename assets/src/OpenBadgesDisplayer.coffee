@@ -15,19 +15,6 @@ OpenBadgesDisplayer = (
       if @ not instanceof obd
         return new obd obj
 
-      @_wrapped = obj
-
-    # export for node
-    if typeof exports is not 'undefined'
-      if typeof module is not 'undefined' and module.exports
-        exports = module.exports = obd
-      
-      exports.obd = obd
-    else
-      @obd = obd
-
-    obd.VERSION = '0.0.1'
-
     # methods
     obd.init = () ->
       @disable_debug()

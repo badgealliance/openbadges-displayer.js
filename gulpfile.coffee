@@ -141,9 +141,9 @@ gulp.task 'less', () ->
 
 gulp.task 'compile_coffee', ['server_coffee', 'client_coffee']
 
-gulp.task 'build', ['copy_templates', 'compile_coffee', 'copy_images', 'watch_less', 'watch_server', 'watch_client']
+gulp.task 'build', ['copy_templates', 'compile_coffee', 'copy_images']
 
-gulp.task 'runserver', ['build'], ()->
+gulp.task 'runserver', ['build', 'watch_less', 'watch_server', 'watch_client'], ()->
   return gulp.src(
     './dist/demo/server.js'
   ).pipe(

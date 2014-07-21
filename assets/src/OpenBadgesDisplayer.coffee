@@ -23,14 +23,14 @@ OpenBadgesDisplayer = (
         return new obd obj
 
     # methods
-    obd.init = () ->
+    obd.init = (options) ->
       @disable_debug()
 
       @init_lightbox()
 
       @insert_css()
       @badges = []
-      @load_images()
+      @load_images(options)
       @parse_meta_data()
 
     obd.eneable_debug = () ->
@@ -62,9 +62,18 @@ OpenBadgesDisplayer = (
       console.log 'Inserting css'
       insertCss css
 
-    obd.load_images = () ->
+    obd.load_images = (options) ->
       console.log 'Loading images'
-      @images = document.getElementsByTagName 'img'
+
+      if typeof options is 'undefined'
+        options = {}
+
+      if options.id
+        @images = [document.getElementById options.id]
+      else if options.className
+        @images = document.getElementsByClassName options.className
+      else
+        @images = document.getElementsByTagName 'img'
 
     obd.parse_meta_data = () ->
       console.log 'Parsing meta data'

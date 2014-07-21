@@ -172,7 +172,7 @@ OpenBadgesDisplayer = (
       @overlay.style.display = 'none'
       @lightbox.style.display = 'none'
 
-    return obd.init()
+    window.obd = obd;
 
 ).call(@)
 

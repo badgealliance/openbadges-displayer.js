@@ -55,9 +55,20 @@ __assets/vendor/png-baker.js__
 
 __openbadges-displayer.min.css__ is compiled with gulp-minify-css and gulp-less.
 
+### Testing
+
+`gulp test` or `npm test`
+
+Tests are written using coffeescript and are run with gulp-mocha.
+
 ## Future
 
+### Add more tests
+
+Need more test coverage.
+
 ### Fix requirements
+
 Install png-baker with node rather than manually.
 
 ### Manual Unbaking

@@ -1,9 +1,9 @@
-<div id="obd-badge-modal" class="obd-badge-modal row">
-  <div class="obd-image col-xs-6">
+<div id="obd-badge-modal" class="obd-badge-modal">
+  <div class="obd-image">
     <img src="<%- src %>">
   </div>
 
-  <div class="obd-description col-xs-6">
+  <div class="obd-description">
     <h2 class="obd-title">
       <%- title %>
     </h2>

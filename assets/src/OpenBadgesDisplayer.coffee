@@ -1,9 +1,16 @@
 OpenBadgesDisplayer = (
   ()->
+    _ = require 'underscore'
     path = require 'path'
     insertCss = require 'insert-css'
     fs = require 'fs'
     PNGBaker = require '../vendor/png-baker.js'
+    tplfile = null
+    fs.readFile __dirname + '/modal.tpl', 'utf8', (err, data) ->
+      if err
+        throw err
+      tplfile = _.template data
+
     css = fs.readFileSync __dirname + '/../../dist/openbadges-displayer.min.css'
     previousOBD = @obd
     breaker = {}
@@ -15,26 +22,15 @@ OpenBadgesDisplayer = (
       if @ not instanceof obd
         return new obd obj
 
-      @_wrapped = obj
-
-    # export for node
-    if typeof exports is not 'undefined'
-      if typeof module is not 'undefined' and module.exports
-        exports = module.exports = obd
-      
-      exports.obd = obd
-    else
-      @obd = obd
-
-    obd.VERSION = '0.0.1'
-
     # methods
-    obd.init = () ->
+    obd.init = (options) ->
       @disable_debug()
+
+      @init_lightbox()
 
       @insert_css()
       @badges = []
-      @load_images()
+      @load_images(options)
       @parse_meta_data()
 
     obd.eneable_debug = () ->
@@ -44,13 +40,40 @@ OpenBadgesDisplayer = (
       @old_logger = console.log
       console.log = () ->
 
+    obd.init_lightbox = () ->
+      # create overlay
+      @overlay = document.createElement 'div'
+      @overlay.setAttribute 'class', 'ob-overlay'
+      @overlay.addEventListener 'click', () =>
+        @hideLightbox()
+      @overlay.style.display = 'none'
+
+
+      # create lightbox
+      @lightbox = document.createElement 'div'
+      @lightbox.setAttribute 'class', 'ob-lightbox container'
+      @lightbox.setAttribute 'id', 'ob-lightbox'
+      @lightbox.style.display = 'none'
+
+      document.body.appendChild @overlay
+      document.body.appendChild @lightbox
+
     obd.insert_css = () ->
       console.log 'Inserting css'
       insertCss css
 
-    obd.load_images = () ->
+    obd.load_images = (options) ->
       console.log 'Loading images'
-      @images = document.getElementsByTagName 'img'
+
+      if typeof options is 'undefined'
+        options = {}
+
+      if options.id
+        @images = [document.getElementById options.id]
+      else if options.className
+        @images = document.getElementsByClassName options.className
+      else
+        @images = document.getElementsByTagName 'img'
 
     obd.parse_meta_data = () ->
       console.log 'Parsing meta data'
@@ -108,7 +131,9 @@ OpenBadgesDisplayer = (
       newP = document.createElement 'p'
       newA = document.createElement 'a'
 
+      badgeID = 'badge_' + new Date().getTime().toString()
       newDiv.setAttribute 'class', 'open-badge-thumb'
+      newDiv.setAttribute 'id', badgeID
       newImgWrapper.setAttribute 'class', 'ob-badge-logo-wrapper'
       newImg.setAttribute 'class', 'ob-badge-logo'
       newStrong.setAttribute 'class', 'ob-badge-title'
@@ -138,7 +163,26 @@ OpenBadgesDisplayer = (
       
       newDiv.appendChild img
 
-    return obd.init()
+      obj = document.getElementById badgeID
+
+      newDiv.addEventListener 'click', () =>
+        @showLightbox {
+          title:assertion.badge.name
+          description:assertion.badge.description
+          src:img.src
+        }
+
+    obd.showLightbox = (data) ->
+      @overlay.style.display = 'block'
+      @lightbox.style.display = 'block'
+      document.getElementById('ob-lightbox').innerHTML = tplfile data
+
+    obd.hideLightbox = () ->
+      @overlay.style.display = 'none'
+      @lightbox.style.display = 'none'
+
+    window.obd = obd;
+
 ).call(@)
 
 module.exports.OpenBadgesDisplayer = OpenBadgesDisplayer

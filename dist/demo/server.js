@@ -1,1 +1,0 @@
-(function(){var i,e,s;e=require("express"),s=require("path"),i=e(),i.use("/",e["static"](s.join(__dirname,"public"))),i.use("/static",e["static"](s.join(__dirname,".."))),i.use("/imgs",e["static"](s.join(__dirname,"imgs"))),i.listen(3e3),console.log("Listening on port 3000")}).call(this);

@@ -11,6 +11,10 @@ base64 = require 'gulp-base64'
 minifyHTML = require 'gulp-minify-html'
 header = require 'gulp-header'
 coffeelint = require 'gulp-coffeelint'
+mocha = require 'gulp-mocha'
+deploy = require 'gulp-gh-pages'
+inlinesource = require 'gulp-inline-source'
+clean = require 'gulp-clean'
 pkg = require path.join __dirname, 'package.json'
 
 banner = [
@@ -42,9 +46,10 @@ paths =
   compiled_js: path.join 'dist', 'js'
   public_js: path.join 'dist', 'demo', 'public', 'js'
   temp: 'temp'
+  deploy_cache: 'deploy_cache'
 
 gulp.task 'lint', ()->
-  gulp.src(
+  return gulp.src(
     path.join path.join '.', 'assets', '**', '*.coffee'
   ).pipe(
     coffeelint()
@@ -70,7 +75,7 @@ gulp.task 'watch_server', ()->
 
 # run gulp-coffee on client files
 gulp.task 'client_coffee', ['less', 'lint'], ()->
-  return gulp.src(
+  gulp.src(
     path.join paths.client.coffee, '*.coffee'
   ).pipe(
     coffee()
@@ -85,7 +90,7 @@ gulp.task 'client_coffee', ['less', 'lint'], ()->
   ).pipe(
     rename 'openbadges-displayer.min.js'
   ).pipe(
-    gulp.dest './dist'
+    gulp.dest './dist/'
   )
 
 # watch less files
@@ -97,10 +102,12 @@ gulp.task 'watch_client', ()->
   gulp.watch path.join(paths.client.coffee, '*.coffee'), ['client_coffee']
 
 # copy templates
-gulp.task 'copy_templates', ()->
+gulp.task 'copy_templates', ['compile_coffee'], ()->
   # Copy index file
   return gulp.src(
-    path.join paths.client.templates,'index.html'
+    path.join(paths.client.templates,'index.html')
+  ).pipe(
+    inlinesource './dist/'
   ).pipe(
     minifyHTML()
   ).pipe(
@@ -111,17 +118,17 @@ gulp.task 'copy_templates', ()->
 
 # copy images
 gulp.task 'copy_images', ()->
-  return gulp.src(
+  gulp.src(
     path.join paths.client.images,'*.png'
   ).pipe(
     gulp.dest(
-      paths.public_images
+      paths.public
     )
   )
 
 # less
 gulp.task 'less', () ->
-  gulp.src(
+  return gulp.src(
     path.join paths.client.less, '*.less'
   ).pipe(
     less()
@@ -141,7 +148,23 @@ gulp.task 'less', () ->
 
 gulp.task 'compile_coffee', ['server_coffee', 'client_coffee']
 
-gulp.task 'runserver', ['copy_templates', 'compile_coffee', 'copy_images', 'watch_less', 'watch_server', 'watch_client'], ()->
+gulp.task 'test', () ->
+  return gulp.src(
+    path.join('test', 'test.coffee'), {
+      read: false
+    }
+  ).pipe(
+    coffeelint()
+  ).pipe(
+    coffeelint.reporter 'fail'
+  ).pipe(
+    coffee()
+  ).pipe mocha {reporter: 'nyan'}
+
+gulp.task 'build', ['test', 'compile_coffee', 'copy_images', 'copy_templates']
+
+
+gulp.task 'runserver', ['build', 'watch_less', 'watch_server', 'watch_client'], ()->
   return gulp.src(
     './dist/demo/server.js'
   ).pipe(
@@ -152,3 +175,15 @@ gulp.task 'runserver', ['copy_templates', 'compile_coffee', 'copy_images', 'watc
   )
 
 gulp.task 'default', ['runserver']
+
+gulp.task 'deploy', ['build'], () ->
+  return gulp.src(
+    [
+      path.join paths.public, 'index.html'
+      path.join paths.public, '*.png'
+    ], {
+      push:false
+    }
+  ).pipe(
+    deploy cacheDir: paths.deploy_cache
+  )

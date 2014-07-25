@@ -29,9 +29,13 @@ Alternately you can specify which elements to inspect by passing options to
 
 ### Options
 
-`className` - Inspect elements with the specified classname.
+**className**
+  
+  A string representing the classname of elements to inspect.
 
-`id` - Inspect element with the specified id.
+**id**
+  
+  A string representing the ID of element to inspect.
 
 **Example:**
 

@@ -1,4 +1,5 @@
 <div id="obd-badge-modal" class="obd-badge-modal">
+  <a id="close-modal" href="#" class="ob-badge-close" onclick="return false">close</a>
   <div class="obd-image">
     <img src="<%- src %>">
   </div>

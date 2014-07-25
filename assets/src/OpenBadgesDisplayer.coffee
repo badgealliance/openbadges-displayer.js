@@ -28,6 +28,12 @@ OpenBadgesDisplayer = (
 
       @init_lightbox()
 
+      # If esc key is pressed, close the lightbox modal.
+      window.addEventListener 'keydown', (e) =>
+        console.log e
+        if e.keyCode == 27
+          @hideLightbox()
+
       @insert_css()
       @badges = []
       @load_images(options)
@@ -47,7 +53,6 @@ OpenBadgesDisplayer = (
       @overlay.addEventListener 'click', () =>
         @hideLightbox()
       @overlay.style.display = 'none'
-
 
       # create lightbox
       @lightbox = document.createElement 'div'
@@ -176,6 +181,8 @@ OpenBadgesDisplayer = (
       @overlay.style.display = 'block'
       @lightbox.style.display = 'block'
       document.getElementById('ob-lightbox').innerHTML = tplfile data
+      document.getElementById('close-modal').addEventListener 'click', () =>
+        @hideLightbox()
 
     obd.hideLightbox = () ->
       @overlay.style.display = 'none'

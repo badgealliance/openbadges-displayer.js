@@ -21,7 +21,7 @@ On a webpage with badges, place the following code just before the closing
 body tag:
 
       <script type="text/javascript">
-        window.obd.init();
+        new window.obd();
       </script>
     </body>
 
@@ -30,7 +30,7 @@ in the browser console.
 
 Openbadges Displayer will inspect all `img` tags on the page.
 Alternately you can specify which elements to inspect by passing options to
-`obd.init`.
+`obd()`.
 
 ### Options
 
@@ -45,7 +45,7 @@ Alternately you can specify which elements to inspect by passing options to
 **Example:**
 
       <script type="text/javascript">
-        window.obd.init(
+        new window.obd(
           {
             className: 'openbadges'
           }

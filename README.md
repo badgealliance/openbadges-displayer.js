@@ -1,25 +1,62 @@
 # Open Badges Displayer
+---
+
 A Javascript client library for easily displaying meta-information about
-baked open badges. `openbadges-displayer.js` is under active development, not
-all features are currently implemented!
-
-## Usage
-
-_Goal_: Include the library at the bottom of an html page (near the `</body>`
-tag would be best) that you have baked open badges on. When the page loads in
-your browser, the library will detect which images are open badges and add
-their metadata to the page.
-
-_Current Status_: If you include the libary in the page, badges will be unbaked
-and included in `window.badges` which you can explore in the browser console.
-You can also manually unbake, which is described next.
-
-## Development
+baked open badges.
 
 `openbadges-displayer.js` is under active development. To help out, fork this
 library and submit pull requests with new features. Get started by picking up an
 [issue](http://github.com/cmcavoy/openbadges-displayer.js/issues), or filing
 [bug](http://github.com/cmcavoy/openbadges-displayer.js/issues).
+
+## Demo
+---
+
+[https://curlee.github.io/openbadges-displayer.js/](https://curlee.github.io/openbadges-displayer.js/)
+
+## Usage
+---
+
+On a webpage with badges, place the following code just before the closing
+body tag:
+
+      <script type="text/javascript">
+        new window.obd();
+      </script>
+    </body>
+
+Badges will be unbaked and included in `window.obd.badges` which you can explore
+in the browser console.
+
+Openbadges Displayer will inspect all `img` tags on the page.
+Alternately you can specify which elements to inspect by passing options to
+`obd()`.
+
+### Options
+
+**className**
+  
+  A string representing the classname of elements to inspect.
+
+**id**
+  
+  A string representing the ID of element to inspect.
+
+**Example:**
+
+      <script type="text/javascript">
+        new window.obd(
+          {
+            className: 'openbadges'
+          }
+        );
+      </script>
+
+This will force openbadges displayer to inspect all elements with the classname
+"openbadges".
+
+## Development
+---
 
 ### Requirements
 
@@ -36,15 +73,17 @@ run the server. Requirements will only install once unless they change.
 
 ### Viewing the demo
 
-In your browser, go to:
+After compiling and running the demo server (`npm start` or `gulp`) go to:
 
-`http://localhost:3000`
+[http://localhost:3000](http://localhost:3000)
 
 ### Compiling
 
-Compiling creates the directory __openbadges-displayer.js/dist/demo__ and the
-files __openbadges-displayer.js/dist/openbadges-displayer.min.js__ and
-__openbadges-displayer.js/dist/openbadges-displayer.min.css__
+Compiling creates:
+
+* __openbadges-displayer.js/dist/demo/__ 
+* __openbadges-displayer.js/dist/openbadges-displayer.min.js__
+* __openbadges-displayer.js/dist/openbadges-displayer.min.css__
 
 The demo is compiled from the `assets/client` and `assets/server`
 folders.
@@ -62,6 +101,7 @@ __openbadges-displayer.min.css__ is compiled with gulp-minify-css and gulp-less.
 Tests are written using coffeescript and are run with gulp-mocha.
 
 ## Future
+---
 
 ### Add more tests
 

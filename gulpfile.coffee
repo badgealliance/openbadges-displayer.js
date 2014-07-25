@@ -177,12 +177,12 @@ gulp.task 'runserver', ['build', 'watch_less', 'watch_server', 'watch_client'], 
 gulp.task 'default', ['runserver']
 
 gulp.task 'deploy', ['build'], () ->
-  return gulp.src(
+  gulp.src(
     [
       path.join paths.public, 'index.html'
       path.join paths.public, '*.png'
     ], {
-      push:false
+      push:true
     }
   ).pipe(
     deploy cacheDir: paths.deploy_cache

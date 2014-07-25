@@ -1,188 +1,182 @@
-OpenBadgesDisplayer = (
-  ()->
-    _ = require 'underscore'
-    path = require 'path'
-    insertCss = require 'insert-css'
-    fs = require 'fs'
-    PNGBaker = require '../vendor/png-baker.js'
-    tplfile = null
-    fs.readFile __dirname + '/modal.tpl', 'utf8', (err, data) ->
-      if err
-        throw err
-      tplfile = _.template data
+_ = require 'underscore'
+path = require 'path'
+insertCss = require 'insert-css'
+fs = require 'fs'
+PNGBaker = require '../vendor/png-baker.js'
+tplfile = null
+fs.readFile __dirname + '/modal.tpl', 'utf8', (err, data) ->
+  if err
+    throw err
+  tplfile = _.template data
+  console.log tplfile
+css = fs.readFileSync __dirname + '/../../dist/openbadges-displayer.min.css'
 
-    css = fs.readFileSync __dirname + '/../../dist/openbadges-displayer.min.css'
-    previousOBD = @obd
-    breaker = {}
-    
-    obd = (obj)->
-      if obj instanceof obd
-        return obj
-      
-      if @ not instanceof obd
-        return new obd obj
+class OpenBadgesDisplayer
+  constructor: (options) ->
+    @disable_debug()
 
-    # methods
-    obd.init = (options) ->
-      @disable_debug()
+    @init_lightbox()
 
-      @init_lightbox()
-
-      @insert_css()
-      @badges = []
-      @load_images(options)
-      @parse_meta_data()
-
-    obd.eneable_debug = () ->
-      console.log = @old_logger
-
-    obd.disable_debug = () ->
-      @old_logger = console.log
-      console.log = () ->
-
-    obd.init_lightbox = () ->
-      # create overlay
-      @overlay = document.createElement 'div'
-      @overlay.setAttribute 'class', 'ob-overlay'
-      @overlay.addEventListener 'click', () =>
+    # If esc key is pressed, close the lightbox modal.
+    window.addEventListener 'keydown', (e) =>
+      console.log e
+      if e.keyCode == 27
         @hideLightbox()
-      @overlay.style.display = 'none'
 
+    @insert_css()
+    @badges = []
+    @load_images(options)
+    @parse_meta_data()
 
-      # create lightbox
-      @lightbox = document.createElement 'div'
-      @lightbox.setAttribute 'class', 'ob-lightbox container'
-      @lightbox.setAttribute 'id', 'ob-lightbox'
-      @lightbox.style.display = 'none'
+  eneable_debug: () ->
+    console.log = @old_logger
 
-      document.body.appendChild @overlay
-      document.body.appendChild @lightbox
+  disable_debug: () ->
+    @old_logger = console.log
+    console.log = () ->
 
-    obd.insert_css = () ->
-      console.log 'Inserting css'
-      insertCss css
+  init_lightbox: () ->
+    # create overlay
+    @overlay = document.createElement 'div'
+    @overlay.setAttribute 'class', 'ob-overlay'
+    @overlay.addEventListener 'click', () =>
+      @hideLightbox()
+    @overlay.style.display = 'none'
 
-    obd.load_images = (options) ->
-      console.log 'Loading images'
+    # create lightbox
+    @lightbox = document.createElement 'div'
+    @lightbox.setAttribute 'class', 'ob-lightbox container'
+    @lightbox.setAttribute 'id', 'ob-lightbox'
+    @lightbox.style.display = 'none'
 
-      if typeof options is 'undefined'
-        options = {}
+    document.body.appendChild @overlay
+    document.body.appendChild @lightbox
 
-      if options.id
-        @images = [document.getElementById options.id]
-      else if options.className
-        @images = document.getElementsByClassName options.className
-      else
-        @images = document.getElementsByTagName 'img'
+  insert_css: () ->
+    console.log 'Inserting css'
+    insertCss css
 
-    obd.parse_meta_data = () ->
-      console.log 'Parsing meta data'
-      xhr = null
-      self = @
+  load_images: (options) ->
+    console.log 'Loading images'
 
-      for img in self.images
-        self.parse_badge img
+    if typeof options is 'undefined'
+      options = {}
 
-    obd.parse_badge = (img) ->
-      console.log 'Parse badge'
+    if options.id
+      @images = [document.getElementById options.id]
+    else if options.className
+      @images = document.getElementsByClassName options.className
+    else
+      @images = document.getElementsByTagName 'img'
 
-      xhr = new XMLHttpRequest()
-      xhr.open 'GET', img.src, true
-      xhr.responseType = 'arraybuffer'
-      
-      xhr.onload = () =>
-        if xhr.status is 200
-          try
-            baked = PNGBaker xhr.response
+  parse_meta_data: () ->
+    console.log 'Parsing meta data'
+    xhr = null
+    self = @
 
-            # Strip non-ascii characters.
-            # Using regex found here: http://stackoverflow.com/a/20856252
-            assertion = JSON.parse baked.textChunks['openbadges'].replace(
-              /[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g,
-              ''
-            )
+    for img in self.images
+      self.parse_badge img
 
-            @badges.push {
-              assertion : assertion
-              img: img
-            }
+  parse_badge: (img) ->
+    console.log 'Parse badge'
 
-            @display_badge assertion, img
+    xhr = new XMLHttpRequest()
+    xhr.open 'GET', img.src, true
+    xhr.responseType = 'arraybuffer'
+    
+    xhr.onload = () =>
+      if xhr.status is 200
+        try
+          baked = new PNGBaker xhr.response
 
-          catch error
+          # Strip non-ascii characters.
+          # Using regex found here: http://stackoverflow.com/a/20856252
+          assertion = JSON.parse baked.textChunks['openbadges'].replace(
+            /[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g,
+            ''
+          )
 
-      xhr.ontimeout = () -> console.error "The xhr request timed out."
-      xhr.onerror = () -> console.log 'error getting badge data'
+          @badges.push {
+            assertion : assertion
+            img: img
+          }
 
-      xhr.send null
+          @display_badge assertion, img
 
-    obd.display_badge = (assertion, img) ->
-      console.log 'Display badge'
+        catch error
 
-      badgeTitle = assertion.badge.name
-      badgeInfo = assertion.badge.description
-      height = 100
+    xhr.ontimeout = () -> console.error "The xhr request timed out."
+    xhr.onerror = () -> console.log 'error getting badge data'
 
-      newDiv = document.createElement 'div'
-      newImg = document.createElement 'div'
-      newImgWrapper = document.createElement 'div'
-      newSpan = document.createElement 'span'
-      newStrong = document.createElement 'strong'
-      newP = document.createElement 'p'
-      newA = document.createElement 'a'
+    xhr.send null
 
-      badgeID = 'badge_' + new Date().getTime().toString()
-      newDiv.setAttribute 'class', 'open-badge-thumb'
-      newDiv.setAttribute 'id', badgeID
-      newImgWrapper.setAttribute 'class', 'ob-badge-logo-wrapper'
-      newImg.setAttribute 'class', 'ob-badge-logo'
-      newStrong.setAttribute 'class', 'ob-badge-title'
-      newSpan.setAttribute 'class', 'ob-info'
-      newA.setAttribute 'href', '#'
+  display_badge: (assertion, img) ->
+    console.log 'Display badge'
 
-      badgeTitle = document.createTextNode badgeTitle
-      badgeInfo = document.createTextNode badgeInfo
-      link = document.createTextNode '[more]'
+    badgeTitle = assertion.badge.name
+    badgeInfo = assertion.badge.description
+    height = 100
 
-      newA.appendChild link
+    newDiv = document.createElement 'div'
+    newImg = document.createElement 'div'
+    newImgWrapper = document.createElement 'div'
+    newSpan = document.createElement 'span'
+    newStrong = document.createElement 'strong'
+    newP = document.createElement 'p'
+    newA = document.createElement 'a'
 
-      newStrong.appendChild badgeTitle
-      
-      newP.appendChild newStrong
-      newP.appendChild badgeInfo
-      newP.appendChild newA
+    badgeID = 'badge_' + new Date().getTime().toString()
+    newDiv.setAttribute 'class', 'open-badge-thumb'
+    newDiv.setAttribute 'id', badgeID
+    newImgWrapper.setAttribute 'class', 'ob-badge-logo-wrapper'
+    newImg.setAttribute 'class', 'ob-badge-logo'
+    newStrong.setAttribute 'class', 'ob-badge-title'
+    newSpan.setAttribute 'class', 'ob-info'
+    newA.setAttribute 'href', '#'
 
-      newImgWrapper.appendChild newImg
+    badgeTitle = document.createTextNode badgeTitle
+    badgeInfo = document.createTextNode badgeInfo
+    link = document.createTextNode '[more]'
 
-      newSpan.appendChild newP
-      newSpan.appendChild newImgWrapper
-      
-      newDiv.appendChild newSpan
-      
-      img.parentNode.insertBefore newDiv, img
-      
-      newDiv.appendChild img
+    newA.appendChild link
 
-      obj = document.getElementById badgeID
+    newStrong.appendChild badgeTitle
+    
+    newP.appendChild newStrong
+    newP.appendChild badgeInfo
+    newP.appendChild newA
 
-      newDiv.addEventListener 'click', () =>
-        @showLightbox {
-          title:assertion.badge.name
-          description:assertion.badge.description
-          src:img.src
-        }
+    newImgWrapper.appendChild newImg
 
-    obd.showLightbox = (data) ->
-      @overlay.style.display = 'block'
-      @lightbox.style.display = 'block'
-      document.getElementById('ob-lightbox').innerHTML = tplfile data
+    newSpan.appendChild newP
+    newSpan.appendChild newImgWrapper
+    
+    newDiv.appendChild newSpan
+    
+    img.parentNode.insertBefore newDiv, img
+    
+    newDiv.appendChild img
 
-    obd.hideLightbox = () ->
-      @overlay.style.display = 'none'
-      @lightbox.style.display = 'none'
+    obj = document.getElementById badgeID
 
-    window.obd = obd;
+    newDiv.addEventListener 'click', () =>
+      @showLightbox {
+        title:assertion.badge.name
+        description:assertion.badge.description
+        src:img.src
+      }
 
-).call(@)
+  showLightbox: (data) ->
+    @overlay.style.display = 'block'
+    @lightbox.style.display = 'block'
+    document.getElementById('ob-lightbox').innerHTML = tplfile data
+    document.getElementById('close-modal').addEventListener 'click', () =>
+      @hideLightbox()
+
+  hideLightbox: () ->
+    @overlay.style.display = 'none'
+    @lightbox.style.display = 'none'
+
+window.obd = OpenBadgesDisplayer
 
 module.exports.OpenBadgesDisplayer = OpenBadgesDisplayer

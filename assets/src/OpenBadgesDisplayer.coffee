@@ -2,7 +2,7 @@ _ = require 'underscore'
 path = require 'path'
 insertCss = require 'insert-css'
 fs = require 'fs'
-PNGBaker = require '../vendor/png-baker.js'
+PNGBaker = require 'png-baker.js'
 tplfile = null
 fs.readFile __dirname + '/modal.tpl', 'utf8', (err, data) ->
   if err
@@ -19,7 +19,6 @@ class OpenBadgesDisplayer
 
     # If esc key is pressed, close the lightbox modal.
     window.addEventListener 'keydown', (e) =>
-      console.log e
       if e.keyCode == 27
         @hideLightbox()
 

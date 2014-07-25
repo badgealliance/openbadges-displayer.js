@@ -43,6 +43,7 @@
     "less": "^1.7.3",
     "mocha": "^1.20.1",
     "openbadges-bakery": "~1.0.2",
+    "png-baker.js": "git://github.com/curlee/png-baker.js.git",
     "underscore": "^1.6.0"
   }
 }

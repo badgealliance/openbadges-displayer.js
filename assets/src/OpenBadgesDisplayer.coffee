@@ -4,16 +4,22 @@ insertCss = require 'insert-css'
 fs = require 'fs'
 PNGBaker = require 'png-baker.js'
 tplfile = null
+badgeTplFile = null
 
-fs.readFile __dirname + '/modal.tpl', 'utf8', (err, data) ->
+fs.readFile __dirname + '/modal.tpl', 'utf8', (err, fileContents) ->
   if err
     throw err
-  tplfile = _.template data
+  tplfile = _.template fileContents
 css = fs.readFileSync __dirname + '/../../dist/openbadges-displayer.min.css'
+
+fs.readFile __dirname + '/badge.tpl', 'utf8', (err, fileContents) ->
+  if err
+    throw err
+  badgeTplFile = _.template fileContents
 
 class OpenBadgesDisplayer
   constructor: (options) ->
-    @disable_debug()
+    #@disable_debug()
 
     @init_lightbox()
 
@@ -112,58 +118,23 @@ class OpenBadgesDisplayer
   display_badge: (assertion, img) ->
     console.log 'Display badge'
 
-    badgeTitle = assertion.badge.name
-    badgeInfo = assertion.badge.description
-    height = 100
+    data = {
+      title:assertion.badge.name
+      description:assertion.badge.description
+      src:img.src
+    }
+    badgeID = 'badge_' + new Date().getTime().toString()
 
     newDiv = document.createElement 'div'
-    newImg = document.createElement 'div'
-    newImgWrapper = document.createElement 'div'
-    newSpan = document.createElement 'span'
-    newStrong = document.createElement 'strong'
-    newP = document.createElement 'p'
-    newA = document.createElement 'a'
-
-    badgeID = 'badge_' + new Date().getTime().toString()
     newDiv.setAttribute 'class', 'open-badge-thumb'
     newDiv.setAttribute 'id', badgeID
-    newImgWrapper.setAttribute 'class', 'ob-badge-logo-wrapper'
-    newImg.setAttribute 'class', 'ob-badge-logo'
-    newStrong.setAttribute 'class', 'ob-badge-title'
-    newSpan.setAttribute 'class', 'ob-info'
-    newA.setAttribute 'href', '#'
-
-    badgeTitle = document.createTextNode badgeTitle
-    badgeInfo = document.createTextNode badgeInfo
-    link = document.createTextNode '[more]'
-
-    newA.appendChild link
-
-    newStrong.appendChild badgeTitle
-    
-    newP.appendChild newStrong
-    newP.appendChild badgeInfo
-    newP.appendChild newA
-
-    newImgWrapper.appendChild newImg
-
-    newSpan.appendChild newP
-    newSpan.appendChild newImgWrapper
-    
-    newDiv.appendChild newSpan
+    newDiv.innerHTML = badgeTplFile data
     
     img.parentNode.insertBefore newDiv, img
-    
     newDiv.appendChild img
 
-    obj = document.getElementById badgeID
-
     newDiv.addEventListener 'click', () =>
-      @showLightbox {
-        title:assertion.badge.name
-        description:assertion.badge.description
-        src:img.src
-      }
+      @showLightbox data
 
   showLightbox: (data) ->
     @overlay.style.display = 'block'

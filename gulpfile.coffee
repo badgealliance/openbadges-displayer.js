@@ -14,7 +14,6 @@ coffeelint = require 'gulp-coffeelint'
 mocha = require 'gulp-mocha'
 deploy = require 'gulp-gh-pages'
 inlinesource = require 'gulp-inline-source'
-clean = require 'gulp-clean'
 pkg = require path.join __dirname, 'package.json'
 
 banner = [

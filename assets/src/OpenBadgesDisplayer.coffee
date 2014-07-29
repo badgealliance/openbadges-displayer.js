@@ -19,7 +19,7 @@ fs.readFile __dirname + '/badge.tpl', 'utf8', (err, fileContents) ->
 
 class OpenBadgesDisplayer
   constructor: (options) ->
-    #@disable_debug()
+    @disable_debug()
 
     @init_lightbox()
 

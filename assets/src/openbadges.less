@@ -72,24 +72,6 @@
     display: block;
   }
 
-  .ob-badge-logo-wrapper {
-    top: -40px;
-    right: 30px;
-    position: absolute;
-  }
-
-  .ob-badge-logo {
-    position: fixed;
-    z-index: 20;
-    background: url('/assets/src/badgelogo.png') left top no-repeat;
-    width: 40px;
-    height: 46px;
-    -webkit-transition: all @transition_time ease-in-out;
-    -moz-transition: all @transition_time ease-in-out;
-    -o-transition: all @transition_time ease-in-out;
-    transition: all @transition_time ease-in-out;
-  }
-
   .ob-info {
     width: 100%;
     position: absolute;
@@ -97,42 +79,58 @@
     z-index: 10;
     bottom: 0;
     padding: 0;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    max-height: 0px;
-    background-color: rgba(255,255,255,0);
-
-    -webkit-transition: all @transition_time ease-in-out;
-    -moz-transition: all @transition_time ease-in-out;
-    -o-transition: all @transition_time ease-in-out;
-    transition: all @transition_time ease-in-out;
-
-    overflow: hidden;
 
     p {
       margin: 0;
-      padding: 0;
+      padding: 5px;
       visibility:hidden;
-      max-height: 90px;
       overflow: hidden;
+      max-height: 0px;
+      background-color: rgba(255,255,255,0);
+
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+
+      transition: all @transition_time ease-in-out;
+      -webkit-transition: all @transition_time ease-in-out;
+      -moz-transition: all @transition_time ease-in-out;
+      -o-transition: all @transition_time ease-in-out;
     }
 
     .ob-badge-title {
       display: block;
     }
+
+    .ob-badge-logo-wrapper {
+      top: -25px;
+      right: -10px;
+      position: absolute;
+
+      .ob-badge-logo {
+        position: relative;
+        z-index: 20;
+        background: url('/assets/src/badgelogo.png') left top no-repeat;
+        width: 40px;
+        height: 46px;
+        -webkit-transition: all @transition_time ease-in-out;
+        -moz-transition: all @transition_time ease-in-out;
+        -o-transition: all @transition_time ease-in-out;
+        transition: all @transition_time ease-in-out;
+      }
+    }
   }
 
   &:hover {
     cursor: pointer;
-    .ob-info {
+    p {
       border-top: 10px solid #000;
-      padding: 5px;
+      visibility:visible;
       max-height: 100px;
       background-color: rgba(255,255,255,1);
     }
-    p {
-      visibility:visible;
+    .ob-badge-logo-wrapper {
+      top: -35px;
     }
   }
 }

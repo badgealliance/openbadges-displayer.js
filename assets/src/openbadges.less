@@ -75,7 +75,6 @@
   .ob-info {
     width: 100%;
     position: absolute;
-    background-color: #fff;
     z-index: 10;
     bottom: 0;
     padding: 0;
@@ -88,6 +87,8 @@
       max-height: 0px;
       background-color: rgba(255,255,255,0);
 
+      border-top: 10px solid rgba(0,0,0,0);
+
       box-sizing: border-box;
       -moz-box-sizing: border-box;
       -webkit-box-sizing: border-box;
@@ -96,6 +97,10 @@
       -webkit-transition: all @transition_time ease-in-out;
       -moz-transition: all @transition_time ease-in-out;
       -o-transition: all @transition_time ease-in-out;
+
+      -moz-background-clip: padding;
+      -webkit-background-clip: padding;
+      background-clip: padding-box;
     }
 
     .ob-badge-title {
@@ -103,7 +108,7 @@
     }
 
     .ob-badge-logo-wrapper {
-      top: -25px;
+      top: -15px;
       right: -10px;
       position: absolute;
 
@@ -124,7 +129,7 @@
   &:hover {
     cursor: pointer;
     p {
-      border-top: 10px solid #000;
+      border-top: 10px solid rgba(0,0,0,1);
       visibility:visible;
       max-height: 100px;
       background-color: rgba(255,255,255,1);

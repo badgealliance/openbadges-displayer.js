@@ -4,11 +4,11 @@ insertCss = require 'insert-css'
 fs = require 'fs'
 PNGBaker = require 'png-baker.js'
 tplfile = null
+
 fs.readFile __dirname + '/modal.tpl', 'utf8', (err, data) ->
   if err
     throw err
   tplfile = _.template data
-  console.log tplfile
 css = fs.readFileSync __dirname + '/../../dist/openbadges-displayer.min.css'
 
 class OpenBadgesDisplayer

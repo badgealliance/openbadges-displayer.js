@@ -6,7 +6,8 @@
     "Joe Curlee <joe.curlee@gmail.com>"
   ],
   "description": "A Javascript client library for easily displaying meta-information about baked open badges.",
-  "main": "assets/js/openbadges-displayer.js",
+  "main": "dist/openbadges-displayer.min.js",
+  "ignore": [],
   "keywords": [
     "openbadges"
   ],

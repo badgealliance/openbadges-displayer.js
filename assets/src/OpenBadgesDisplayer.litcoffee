@@ -51,6 +51,7 @@ Declare the main class.
         @parse_meta_data()
 
 ## enable_debug
+-----
 
 Enable debugging.
 
@@ -58,6 +59,7 @@ Enable debugging.
         console.log = @old_logger
 
 ## disable_debug
+-----
 
 Disable debugging.
 
@@ -65,7 +67,8 @@ Disable debugging.
         @old_logger = console.log
         console.log = () ->
 
-# init_lightbox
+## init_lightbox
+-----
 
 Initialize a lightbox.
 
@@ -91,7 +94,8 @@ Append the overlay and lightbox to body.
         document.body.appendChild @overlay
         document.body.appendChild @lightbox
 
-# insert_css
+## insert_css
+-----
 
 Insert the css.
 
@@ -99,7 +103,8 @@ Insert the css.
         console.log 'Inserting css'
         insertCss css
 
-# load_images
+## load_images
+-----
 
 Load the images.
 
@@ -116,7 +121,8 @@ Load the images.
         else
           @images = document.getElementsByTagName 'img'
 
-# parse_meta_data
+## parse_meta_data
+-----
 
 Parse the meta data.
 
@@ -128,7 +134,8 @@ Parse the meta data.
         for img in self.images
           self.parse_badge img
 
-# parse_badge
+## parse_badge
+-----
 
 Parse the badge data.
 
@@ -165,7 +172,8 @@ Parse the badge data.
 
         xhr.send null
 
-# display_badge
+## display_badge
+-----
 
 Display the badge.
 
@@ -190,7 +198,8 @@ Display the badge.
         newDiv.addEventListener 'click', () =>
           @showLightbox data
 
-# showLightbox
+## showLightbox
+-----
 
 Show the lightbox.
 
@@ -201,7 +210,8 @@ Show the lightbox.
         document.getElementById('close-modal').addEventListener 'click', () =>
           @hideLightbox()
 
-# hideLightbox
+## hideLightbox
+-----
 
 Hide the lightbox.
 

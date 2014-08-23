@@ -1,4 +1,5 @@
 # Gulpfile
+-----
 
 Does gulp stuff.
 
@@ -57,6 +58,7 @@ Define the paths
       deploy_cache: 'deploy_cache'
 
 ## lint
+-----
 
 Lint check all coffeescript files.
 
@@ -70,6 +72,7 @@ Lint check all coffeescript files.
       )
 
 ## server_coffee
+-----
 
 Compile coffee on server files.
 
@@ -85,6 +88,7 @@ Compile coffee on server files.
       )
 
 ## watch_server
+-----
 
 Watch server files for changes
 
@@ -92,6 +96,7 @@ Watch server files for changes
       gulp.watch path.join(paths.server.coffee, '*coffee'), ['server_coffee']
 
 ## client_coffee
+-----
 
 Run gulp-coffee on client files
 
@@ -115,6 +120,7 @@ Run gulp-coffee on client files
       )
 
 ## watch_less
+-----
 
 Watch less files
 
@@ -122,6 +128,7 @@ Watch less files
       gulp.watch path.join(paths.client.less, '*.less'), ['client_coffee']
 
 ## watch_client
+-----
 
 Watch client files for changes
 
@@ -129,6 +136,7 @@ Watch client files for changes
       gulp.watch path.join(paths.client.coffee, '*coffee'), ['client_coffee']
 
 ## copy_templates
+-----
 
 Copy templates.
 
@@ -147,6 +155,7 @@ Copy templates.
       )
 
 ## copy_images
+-----
 
 Copy images.
 
@@ -160,6 +169,7 @@ Copy images.
       )
 
 ## less
+-----
 
 Compile less files.
 
@@ -183,12 +193,14 @@ Compile less files.
       )
 
 ## compile_coffee
+-----
 
 Compile server and client coffee files.
 
     gulp.task 'compile_coffee', ['server_coffee', 'client_coffee']
 
 ## test
+-----
 
 Run test files.
 
@@ -206,6 +218,7 @@ Run test files.
       ).pipe mocha {reporter: 'nyan'}
 
 ## build
+-----
 
 Build the app.
 
@@ -217,6 +230,7 @@ Build the app.
     ]
 
 ## runserver
+-----
 
 Run the server.
 
@@ -236,12 +250,14 @@ Run the server.
       )
 
 ## default
+-----
 
 Calls `runserver`
 
     gulp.task 'default', ['runserver']
 
 ## deploy
+-----
 
 Calls `build` then pushes to Github pages.
 

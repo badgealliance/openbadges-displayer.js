@@ -1,0 +1,22 @@
+{
+  "name": "openbadges-displayer.js",
+  "version": "0.1.4",
+  "homepage": "https://github.com/cmcavoy/openbadges-displayer.js",
+  "authors": [
+    "Joe Curlee <joe.curlee@gmail.com>"
+  ],
+  "description": "A Javascript client library for easily displaying meta-information about baked open badges.",
+  "main": "dist/openbadges-displayer.min.js",
+  "ignore": [],
+  "keywords": [
+    "openbadges"
+  ],
+  "license": "BSD-2-Clause",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

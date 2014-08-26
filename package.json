@@ -2,7 +2,7 @@
   "name": "openbadges-displayer.js",
   "description": "A Javascript client library for easily displaying meta-information about baked open badges.",
   "main": "assets/js/openbadges-displayer.js",
-  "version": "0.0.1",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "start": "npm install; gulp",
@@ -43,6 +43,7 @@
     "less": "^1.7.3",
     "mocha": "^1.20.1",
     "openbadges-bakery": "~1.0.2",
+    "png-baker.js": "git://github.com/curlee/png-baker.js.git",
     "underscore": "^1.6.0"
   }
 }

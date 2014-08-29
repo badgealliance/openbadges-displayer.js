@@ -19,7 +19,7 @@ badges.
 
     <script type="text/javascript" src="openbadges-displayer.min.js" ></script>
 
-### Unbaking
+### Unbake (display) badges
 
     <script type="text/javascript">
       window.openbadges.unbake([options]);

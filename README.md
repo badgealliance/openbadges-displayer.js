@@ -4,11 +4,6 @@
 A Javascript client library for easily displaying meta-information about
 baked open badges.
 
-`openbadges-displayer.js` is under active development. To help out, fork this
-library and submit pull requests with new features. Get started by picking up an
-[issue](http://github.com/cmcavoy/openbadges-displayer.js/issues), or filing
-[bug](http://github.com/cmcavoy/openbadges-displayer.js/issues).
-
 ## Demo
 -----
 
@@ -16,6 +11,8 @@ library and submit pull requests with new features. Get started by picking up an
 
 ## Usage
 -----
+
+[Download the latest release.](https://github.com/cmcavoy/openbadges-displayer.js/releases)
 
 Insert openbadges-displayer.js at the bottom of your web page that contains
 badges.
@@ -25,10 +22,10 @@ badges.
 ### Unbaking
 
     <script type="text/javascript">
-      window.obd.unbake([options]);
+      window.openbadges.unbake([options]);
     </script>
 
-Badges will be unbaked and included in `window.obd.badges` which you can explore
+Badges will be unbaked and included in `window.openbadges.badges` which you can explore
 in the browser console.
 
 Additionally, a lightbox will be added to the page. Partial badge info will be
@@ -37,6 +34,11 @@ lightbox after clicking a badge.
 
 ## Development
 -----
+
+`openbadges-displayer.js` is under active development. To help out, fork this
+library and submit pull requests with new features. Get started by picking up an
+[issue](http://github.com/cmcavoy/openbadges-displayer.js/issues), or filing
+[bug](http://github.com/cmcavoy/openbadges-displayer.js/issues).
 
 ### Requirements
 

@@ -228,9 +228,9 @@ Hide the lightbox.
         @overlay.style.display = 'none'
         @lightbox.style.display = 'none'
 
-    # Add OpenBadgesDisplayer to window.obd
+    # Add OpenBadgesDisplayer to window.openbadges
 
-    window.obd = new OpenBadgesDisplayer
+    window.openbadges = new OpenBadgesDisplayer
 
     # Export the module.
 

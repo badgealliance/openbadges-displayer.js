@@ -1,6 +1,9 @@
 # OpebBadgesDisplayer
 -----
 
+## Initialization
+-----
+
 Require some libs.
 
     _ = require 'underscore'
@@ -216,6 +219,7 @@ Display the badge.
 Show the lightbox.
 
       showLightbox: (data) ->
+        @scrolling false
         @overlay.style.display = 'block'
         @lightbox.style.display = 'block'
         document.getElementById('ob-lightbox').innerHTML = tplfile data
@@ -230,11 +234,32 @@ Hide the lightbox.
       hideLightbox: () ->
         @overlay.style.display = 'none'
         @lightbox.style.display = 'none'
+        @scrolling true
 
-    # Add OpenBadgesDisplayer to window.openbadges
+
+## scrolling
+-----
+
+Enables / disables browser scrolling.
+
+      scrolling: (scroll) ->
+        document.documentElement.style.overflow =
+          if scroll then 'auto' else 'hidden'
+
+        # ie support
+        document.body.scroll = if scroll then 'yes' else 'no'
+
+## enable_scrolling
+
+Enable browser scrolling.
+
+    enable_scrolling: () ->
+      document.documentElement.style.overflow = 'auto'
+      document.body.scroll = 'yes' # ie support
+
+
+## Finalization
+-----
 
     window.openbadges = new OpenBadgesDisplayer
-
-    # Export the module.
-
     module.exports.OpenBadgesDisplayer = OpenBadgesDisplayer

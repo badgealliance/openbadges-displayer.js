@@ -1,11 +1,23 @@
 # Gulpfile
 -----
 
-Does gulp stuff.
+Controls important operations such as compiling openbadges-displayer.js and
+running the server.
 
+Run gulp tasks from the command line.
 
-Require libs.
+`gulp` runs the default task.
 
+`gulp *task name*` runs an individual task
+
+**Example:** `gulp build`
+
+## Setup
+-----
+
+Require libs and define paths.
+
+    # Require various libraries.
     gulp = require 'gulp'
     expressService = require 'gulp-express-service'
     coffee = require 'gulp-coffee'
@@ -24,21 +36,10 @@ Require libs.
     inlinesource = require 'gulp-inline-source'
     pkg = require path.join __dirname, 'package.json'
 
-Set the banner for later use.
-
-    banner = [
-        '/*!'
-        '<%= pkg.name %> v<%= pkg.version %>'
-        ' | @license <%= pkg.license %>'
-        '*/'].join ' '
-    banner += '\n'
-
-Define the paths
-
+    # Define paths.
     assets = path.join '.', 'assets'
     clientAssets = path.join assets, 'demo', 'client'
     serverAssets = path.join assets, 'demo', 'server'
-
     paths =
       client:
         css:path.join clientAssets, 'css'
@@ -57,8 +58,78 @@ Define the paths
       temp: 'temp'
       deploy_cache: 'deploy_cache'
 
-## lint
+Create banner for later use. This banner will be included at the top of compiled
+CSS and JS pages.
+
+    banner = [
+        '/*!'
+        '<%= pkg.name %> v<%= pkg.version %>'
+        ' | @license <%= pkg.license %>'
+        '*/'].join ' ' + '\n'
+
+## Tasks
 -----
+
+### build
+
+Build openbadges-displayer.
+
+  * __openbadges-displayer.js/dist/demo/__ 
+  * __openbadges-displayer.js/dist/openbadges-displayer.min.js__
+  * __openbadges-displayer.js/dist/openbadges-displayer.min.css__
+
+The demo is compiled from the `assets/client` and `assets/server`
+folders.
+
+Gulp uses browserify and uglify to create __openbadges-displayer.min.js__ which
+is compiled from __assets/src/OpenBadgesDisplayer.coffee__ and its requirement,
+__assets/vendor/png-baker.js__
+
+__openbadges-displayer.min.css__ is compiled with gulp-minify-css and gulp-less.
+
+    gulp.task 'build', [
+      'test'
+      'compile_coffee'
+      'copy_images'
+      'copy_templates'
+    ]
+
+### deploy
+
+Calls `build` then pushes to Github pages.
+
+    gulp.task 'deploy', ['build'], () ->
+      gulp.src(
+        [
+          path.join paths.public, 'index.html'
+          path.join paths.public, '*.png'
+        ], {
+          push:true
+        }
+      ).pipe(
+        deploy cacheDir: paths.deploy_cache
+      )
+
+### runserver
+
+Run the server.
+
+    gulp.task 'runserver', [
+      'build'
+      'watch_less'
+      'watch_server'
+      'watch_client'
+    ], ()->
+      return gulp.src(
+        './dist/demo/server.js'
+      ).pipe(
+        expressService {
+          file: './dist/demo/server.js'
+          NODE_ENV: 'DEV'
+        }
+      )
+
+### lint
 
 Lint check all coffeescript files.
 
@@ -71,8 +142,7 @@ Lint check all coffeescript files.
         coffeelint.reporter 'fail'
       )
 
-## server_coffee
------
+### server_coffee
 
 Compile coffee on server files.
 
@@ -87,16 +157,14 @@ Compile coffee on server files.
         gulp.dest paths.dist.demo
       )
 
-## watch_server
------
+### watch_server
 
 Watch server files for changes
 
     gulp.task 'watch_server', ()->
       gulp.watch path.join(paths.server.coffee, '*coffee'), ['server_coffee']
 
-## client_coffee
------
+### client_coffee
 
 Run gulp-coffee on client files
 
@@ -119,24 +187,21 @@ Run gulp-coffee on client files
         gulp.dest './dist/'
       )
 
-## watch_less
------
+### watch_less
 
 Watch less files
 
     gulp.task 'watch_less', ()->
       gulp.watch path.join(paths.client.less, '*.less'), ['client_coffee']
 
-## watch_client
------
+### watch_client
 
 Watch client files for changes
 
     gulp.task 'watch_client', ()->
       gulp.watch path.join(paths.client.coffee, '*coffee'), ['client_coffee']
 
-## copy_templates
------
+### copy_templates
 
 Copy templates.
 
@@ -154,8 +219,7 @@ Copy templates.
         )
       )
 
-## copy_images
------
+### copy_images
 
 Copy images.
 
@@ -168,8 +232,7 @@ Copy images.
         )
       )
 
-## less
------
+### less
 
 Compile less files.
 
@@ -192,15 +255,13 @@ Compile less files.
         )
       )
 
-## compile_coffee
------
+### compile_coffee
 
 Compile server and client coffee files.
 
     gulp.task 'compile_coffee', ['server_coffee', 'client_coffee']
 
-## test
------
+### test
 
 Run test files.
 
@@ -217,58 +278,8 @@ Run test files.
         coffee()
       ).pipe mocha {reporter: 'nyan'}
 
-## build
------
-
-Build the app.
-
-    gulp.task 'build', [
-      'test'
-      'compile_coffee'
-      'copy_images'
-      'copy_templates'
-    ]
-
-## runserver
------
-
-Run the server.
-
-    gulp.task 'runserver', [
-      'build'
-      'watch_less'
-      'watch_server'
-      'watch_client'
-    ], ()->
-      return gulp.src(
-        './dist/demo/server.js'
-      ).pipe(
-        expressService {
-          file: './dist/demo/server.js'
-          NODE_ENV: 'DEV'
-        }
-      )
-
-## default
------
+### default
 
 Calls `runserver`
 
     gulp.task 'default', ['runserver']
-
-## deploy
------
-
-Calls `build` then pushes to Github pages.
-
-    gulp.task 'deploy', ['build'], () ->
-      gulp.src(
-        [
-          path.join paths.public, 'index.html'
-          path.join paths.public, '*.png'
-        ], {
-          push:true
-        }
-      ).pipe(
-        deploy cacheDir: paths.deploy_cache
-      )

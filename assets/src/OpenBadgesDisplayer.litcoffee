@@ -35,9 +35,10 @@ Read and set the badge template contents.
 Declare the main class.
 
     class OpenBadgesDisplayer
+      opts: {}
+
       constructor: (options) ->
         @disable_debug()
-
         @init_lightbox()
 
         # If esc key is pressed, close the lightbox modal.
@@ -47,7 +48,18 @@ Declare the main class.
 
         @insert_css()
         @badges = []
-        @load_images(options)
+
+## unbake
+-----
+
+Unbake and display any badges on the page.
+
+Calls `load_images` AND `parse_meta_data`
+
+      unbake: (options)->
+        # check for existence of options
+        @opts = if options? then options else {}
+        @load_images()
         @parse_meta_data()
 
 ## enable_debug
@@ -74,7 +86,7 @@ Initialize a lightbox.
 
       init_lightbox: () ->
 
-Ceate the overlay.
+        # Ceate the overlay.
 
         @overlay = document.createElement 'div'
         @overlay.setAttribute 'class', 'ob-overlay'
@@ -82,14 +94,14 @@ Ceate the overlay.
           @hideLightbox()
         @overlay.style.display = 'none'
 
-Create the lightbox
+        # Create the lightbox
 
         @lightbox = document.createElement 'div'
         @lightbox.setAttribute 'class', 'ob-lightbox container'
         @lightbox.setAttribute 'id', 'ob-lightbox'
         @lightbox.style.display = 'none'
 
-Append the overlay and lightbox to body.
+        # Append the overlay and lightbox to body.
 
         document.body.appendChild @overlay
         document.body.appendChild @lightbox
@@ -108,16 +120,13 @@ Insert the css.
 
 Load the images.
 
-      load_images: (options) ->
+      load_images: () ->
         console.log 'Loading images'
 
-        if typeof options is 'undefined'
-          options = {}
-
-        if options.id
-          @images = [document.getElementById options.id]
-        else if options.className
-          @images = document.getElementsByClassName options.className
+        if @opts.id
+          @images = [document.getElementById @opts.id]
+        else if @opts.className
+          @images = document.getElementsByClassName @opts.className
         else
           @images = document.getElementsByTagName 'img'
 
@@ -219,10 +228,10 @@ Hide the lightbox.
         @overlay.style.display = 'none'
         @lightbox.style.display = 'none'
 
-Add OpenBadgesDisplayer to window.obd
+    # Add OpenBadgesDisplayer to window.obd
 
-    window.obd = OpenBadgesDisplayer
+    window.obd = new OpenBadgesDisplayer
 
-Export the module.
+    # Export the module.
 
     module.exports.OpenBadgesDisplayer = OpenBadgesDisplayer

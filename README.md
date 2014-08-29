@@ -25,8 +25,8 @@ badges.
       window.openbadges.unbake([options]);
     </script>
 
-Badges will be unbaked and included in `window.openbadges.badges` which you can explore
-in the browser console.
+Badges will be unbaked and included in `window.openbadges.badges` which you can
+explore in the browser console.
 
 Additionally, a lightbox will be added to the page. Partial badge info will be
 displayed when rolling over the badge, and full info will be displayed in the
@@ -52,6 +52,11 @@ After cloning this repo:
 
 This will install requirements and then use gulp to compile the code and
 run the server. Requirements will only install once (unless they change).
+
+### Gulp
+
+openbadges-displayer.js uses Gulp. For available commands, take a look at
+[gulpfile.litcoffee](gulpfile.litcoffee)
 
 ### Viewing the demo
 

@@ -219,7 +219,7 @@ Display the badge.
 Show the lightbox.
 
       showLightbox: (data) ->
-        @scrolling false
+        @allow_scrolling false
         @overlay.style.display = 'block'
         @lightbox.style.display = 'block'
         document.getElementById('ob-lightbox').innerHTML = tplfile data
@@ -234,29 +234,20 @@ Hide the lightbox.
       hideLightbox: () ->
         @overlay.style.display = 'none'
         @lightbox.style.display = 'none'
-        @scrolling true
+        @allow_scrolling true
 
 
-## scrolling
+## allow_scrolling
 -----
 
 Enables / disables browser scrolling.
 
-      scrolling: (scroll) ->
+      allow_scrolling: (scroll) ->
         document.documentElement.style.overflow =
           if scroll then 'auto' else 'hidden'
 
         # ie support
         document.body.scroll = if scroll then 'yes' else 'no'
-
-## enable_scrolling
-
-Enable browser scrolling.
-
-    enable_scrolling: () ->
-      document.documentElement.style.overflow = 'auto'
-      document.body.scroll = 'yes' # ie support
-
 
 ## Finalization
 -----

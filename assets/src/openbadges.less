@@ -13,14 +13,21 @@
 .ob-lightbox {
   font-family: Helvetica, Arial, sans-serif;
   margin: auto;
-  position: absolute;
-  top: -55px;
+  position: fixed;
+  
   left: 0;
   bottom: 0;
   right: 0;
   z-index: 11;
   max-width: 700px;
   max-height: 300px;
+  width: 700px;
+  height: 300px;
+
+  top: 50%;
+  left: 50%;
+  margin-left: -350px;
+  margin-top: -200px;
 
   .obd-badge-modal {
     border: 10px solid #000;

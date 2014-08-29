@@ -43,7 +43,7 @@ Declare the main class.
       old_logger: console.log
 
       constructor: (options) ->
-        @allow_debugging false
+        @allow_debugging true
         @init_lightbox()
 
         # If esc key is pressed, close the lightbox modal.
@@ -210,10 +210,29 @@ Display the badge.
 Show the lightbox.
 
       show_lightbox: (data) ->
+        body = document.body
+        html = document.documentElement
+
+        # disable scrolling
         @allow_scrolling false
+
+        # display the overlay and modal
         @overlay.style.display = 'block'
         @lightbox.style.display = 'block'
+
+        # set the hight of the overlay to the document's height
+        @overlay.style.height = Math.max(
+          body.scrollHeight,
+          body.offsetHeight,
+          html.clientHeight,
+          html.scrollHeight,
+          html.offsetHeight
+        ) + 'px'
+
+        # insert the modal template
         document.getElementById('ob-lightbox').innerHTML = tplfile data
+
+        # listen for closing click
         document.getElementById('close-modal').addEventListener 'click', () =>
           @hide_lightbox()
 

@@ -1,4 +1,4 @@
-# Open Badges Displayer
+# ![Logo](assets/src/badgelogo.png) Open Badges Displayer
 -----
 
 A Javascript client library for easily displaying meta-information about

@@ -36,6 +36,7 @@ Declare the main class.
 
     class OpenBadgesDisplayer
       opts: {}
+      unbaked: false
 
       constructor: (options) ->
         @disable_debug()
@@ -58,9 +59,11 @@ Calls `load_images` AND `parse_meta_data`
 
       unbake: (options)->
         # check for existence of options
-        @opts = if options? then options else {}
-        @load_images()
-        @parse_meta_data()
+        if not @unbaked
+          @unbaked = true
+          @opts = if options? then options else {}
+          @load_images()
+          @parse_meta_data()
 
 ## enable_debug
 -----

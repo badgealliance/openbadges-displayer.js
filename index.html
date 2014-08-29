@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<head>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <style>
+    body {
+      font-family : 'Open Sans';
+      margin-left: 40px;
+      margin-right: 40px;
+    }
+    #assertion {
+      font-weight: bold;
+      background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+  <h1>Baked Badges in the Browser</h1>
+  <p>Back in September, Mike wrote <a href="http://stenington.tumblr.com/post/62155201834/display-without-the-displayer-api">a great blog post</a> where he pulled the assertion url from a baked badge included on the page. Since then, we've changed the specification to allow for the full badge to be baked.
+      This demo shows a badge with the new style baking being unbaked in the page. From the end users perspective, the only thing they would need to do is add the badges to the page, and then include a bit of Javascript.</p>
+
+  <h2>The Badge</h2>
+  <div><img src="demobadge.png"></div>
+
+  <h2>Unbaking the Badge Without a Server</h2>
+  <p><button id="unbake">Unbake the Badge</button></p>
+
+  <div id="assertion">
+
+  </div>
+  <div id="explanation">
+    <h3>What just happened?</h3>
+    <p>When you pressed the button, the Javascript included on this page found the badge above, pulled the metadata that's 'baked' into the badge, and inserted some of it into the paragraph above. All without a server!</p>
+  </div>
+
+  <h2>What's the big deal?</h2>
+  <p>Backpacks could be as simple as github pages, Thimble, or any of a gazillion other free hosting services. Most of our baking / unbaking efforts (with the exception of some PoC work from Atul and Mike) have been focused on the server. By pushing this into the client, we open a lot of possibilities.</p>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="build/openbadgesDisplay.js" type="text/javascript"></script>
+  <script src="demoApp.js" type="text/javascript"></script>
+</body>

@@ -48,7 +48,7 @@ Declare the main class.
         # If esc key is pressed, close the lightbox modal.
         window.addEventListener 'keydown', (e) =>
           if e.keyCode == 27
-            @hideLightbox()
+            @hide_lightbox()
 
         @insert_css()
         @badges = []
@@ -97,7 +97,7 @@ Initialize a lightbox.
         @overlay = document.createElement 'div'
         @overlay.setAttribute 'class', 'ob-overlay'
         @overlay.addEventListener 'click', () =>
-          @hideLightbox()
+          @hide_lightbox()
         @overlay.style.display = 'none'
 
         # Create the lightbox
@@ -211,27 +211,27 @@ Display the badge.
         newDiv.appendChild img
 
         newDiv.addEventListener 'click', () =>
-          @showLightbox data
+          @show_lightbox data
 
-## showLightbox
+## show_lightbox
 -----
 
 Show the lightbox.
 
-      showLightbox: (data) ->
+      show_lightbox: (data) ->
         @allow_scrolling false
         @overlay.style.display = 'block'
         @lightbox.style.display = 'block'
         document.getElementById('ob-lightbox').innerHTML = tplfile data
         document.getElementById('close-modal').addEventListener 'click', () =>
-          @hideLightbox()
+          @hide_lightbox()
 
-## hideLightbox
+## hide_lightbox
 -----
 
 Hide the lightbox.
 
-      hideLightbox: () ->
+      hide_lightbox: () ->
         @overlay.style.display = 'none'
         @lightbox.style.display = 'none'
         @allow_scrolling true

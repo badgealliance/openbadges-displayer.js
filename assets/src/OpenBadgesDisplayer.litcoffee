@@ -40,9 +40,10 @@ Declare the main class.
     class OpenBadgesDisplayer
       opts: {}
       unbaked: false
+      old_logger: console.log
 
       constructor: (options) ->
-        @disable_debug()
+        @allow_debugging false
         @init_lightbox()
 
         # If esc key is pressed, close the lightbox modal.
@@ -68,22 +69,12 @@ Calls `load_images` AND `parse_meta_data`
           @load_images()
           @parse_meta_data()
 
-## enable_debug
------
+## allow_debugging
 
-Enable debugging.
+Enable / disable debugging.
 
-      enable_debug: () ->
-        console.log = @old_logger
-
-## disable_debug
------
-
-Disable debugging.
-
-      disable_debug: () ->
-        @old_logger = console.log
-        console.log = () ->
+      allow_debugging: (debug)->
+        console.log = if debug then @old_logger else ()->
 
 ## init_lightbox
 -----

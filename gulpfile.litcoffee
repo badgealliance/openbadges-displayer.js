@@ -97,6 +97,7 @@ Compiled from files found in `assets/src` directory.
       .pipe rename 'openbadges-displayer.min.js'
       .pipe gulp.dest './dist/'
       
+### Demo tasks
 
 #### build_demo
 

@@ -183,7 +183,7 @@ Run the server.
 
     gulp.task 'run_server', ()->
       return gulp.src './dist/demo/server.js'
-       .pipe expressService file: './dist/demo/server.js', NODE_ENV: 'DEV'
+      .pipe expressService file: './dist/demo/server.js', NODE_ENV: 'DEV'
 
 #### clean
 
@@ -191,7 +191,7 @@ Removes the dist directory for a clean build.
 
     gulp.task 'clean', ()->
       return gulp.src 'dist', {read:false}
-        .pipe clean()
+      .pipe clean()
 
 
 #### default

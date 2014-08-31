@@ -12,6 +12,8 @@ baked open badges.
 ## Usage
 -----
 
+`bower install git@github.com:cmcavoy/openbadges-displayer.js.git`
+
 [Download the latest release.](https://github.com/cmcavoy/openbadges-displayer.js/releases)
 
 Insert openbadges-displayer.js at the bottom of your web page that contains

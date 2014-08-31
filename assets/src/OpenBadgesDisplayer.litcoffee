@@ -7,7 +7,6 @@
 Require some libs.
 
     _ = require 'underscore'
-    path = require 'path'
     insertCss = require 'insert-css'
     fs = require 'fs'
     PNGBaker = require 'png-baker.js'

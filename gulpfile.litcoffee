@@ -81,13 +81,12 @@ These tasks will help us build the main library.
 
 #### build_main
 
-Builds the following files
+Builds the main library.
 
-  * __openbadges-displayer.js/dist/openbadges-displayer.min.js__
-  * __openbadges-displayer.js/dist/openbadges-displayer.min.css__
+Compiles the files dist/openbadges-displayer.min.js and
+dist/openbadges-displayer.min.css
 
-Compile coffeescript, and test the resulting JS file.
-
+Compiled from files found in `assets/src` directory.
 
     gulp.task 'build_main', ()->
       return gulp.src path.join paths.client.coffee, '*coffee'
@@ -103,9 +102,9 @@ Compile coffeescript, and test the resulting JS file.
 
 Build the demo.
 
-  * __openbadges-displayer.js/dist/demo/__ 
+Compiles the files found dist/demo
 
-The demo is compiled from the `assets/demo` directory.
+Compiled from files found in `assets/demo` directory.
 
     gulp.task 'build_demo', ()->
       return gulp.src path.join(paths.server.coffee, '*coffee')
@@ -168,7 +167,7 @@ Lint check all coffeescript files.
 
 #### test
 
-Run test files.
+Run test files with mocha.
 
     gulp.task 'test', () ->
       return gulp.src path.join('test', 'test.litcoffee'), read: false

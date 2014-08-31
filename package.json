@@ -40,6 +40,7 @@
     "gulp-uglify": "^0.3.1",
     "insert-css": "~0.1.1",
     "jquery": "~2.1.1",
+    "jsdom": "^1.0.0-pre.5",
     "less": "^1.7.3",
     "mocha": "^1.20.1",
     "openbadges-bakery": "~1.0.2",

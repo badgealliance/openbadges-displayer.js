@@ -193,7 +193,6 @@ Removes the dist directory for a clean build.
       return gulp.src 'dist', {read:false}
       .pipe clean()
 
-
 #### default
 
 Builds the library and demo, and runs the server.
@@ -204,9 +203,9 @@ Builds the library and demo, and runs the server.
         'less'
         'lint'
         'build_main'
+        'test'
         'copy_templates'
         'copy_images'
         'build_demo'
-        'test'
         'run_server'
       )

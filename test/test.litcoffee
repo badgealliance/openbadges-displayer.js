@@ -22,12 +22,10 @@ Tests for the OpenBadgesDisplayer class.
 Test class variables
 
       describe '#vars', ()->
-        it 'should return true when opts is {}', (done)->
+        it 'should return true when opts is object', (done)->
           jsdom.env(
             badge
             [obd]
             done: (err, window)->
               done assert.equal typeof window.openbadges.opts, 'object'
           )
-
-

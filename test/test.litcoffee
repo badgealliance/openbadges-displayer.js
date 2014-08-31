@@ -5,12 +5,29 @@ Tests are written in mocha.
 
     path = require 'path'
     assert = require 'assert'
-    #obd = require path.join '..', 'assets', 'src', 'OpenBadgesDisplayer'
+    jsdom = require 'jsdom'
+    badge = '
+    <img src="https://curlee.github.io/openbadges-displayer.js/demobadge.png">'
+    obd = path.join '..', 'dist', 'openbadges-displayer.min.js'
 
-## Tests for OpenBadgesDisplayer.litcoffee
+## Tests
 -----
 
+Tests for the OpenBadgesDisplayer class.
+
     describe 'OpenBadgesDisplayer', () ->
-      describe '#unbake()', ()->
-        it '', (done)->
-          done()
+
+### vars
+
+Test class variables
+
+      describe '#vars', ()->
+        it 'should return true when opts is {}', (done)->
+          jsdom.env(
+            badge
+            [obd]
+            done: (err, window)->
+              done assert.equal typeof window.openbadges.opts, 'object'
+          )
+
+

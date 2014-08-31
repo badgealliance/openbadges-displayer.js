@@ -261,5 +261,8 @@ Enables / disables browser scrolling.
 ## Finalization
 -----
 
+An instance of OpenBadgesDisplayer gets attached to window
+
     window.openbadges = new OpenBadgesDisplayer
-    module.exports.OpenBadgesDisplayer = OpenBadgesDisplayer
+
+    module.exports = OpenBadgesDisplayer

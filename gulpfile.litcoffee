@@ -90,23 +90,13 @@ Compile coffeescript, and test the resulting JS file.
 
 
     gulp.task 'build_main', ()->
-      return gulp.src(
-        path.join paths.client.coffee, '*coffee'
-      ).pipe(
-        coffee()
-      ).pipe(
-        browserify {
-          transform:['brfs']
-        }
-      ).pipe(
-        uglify()
-      ).pipe(
-        header banner, { pkg: pkg }
-      ).pipe(
-        rename 'openbadges-displayer.min.js'
-      ).pipe(
-        gulp.dest './dist/'
-      )
+      return gulp.src path.join paths.client.coffee, '*coffee'
+      .pipe coffee()
+      .pipe browserify { transform:['brfs'] }
+      .pipe uglify()
+      .pipe header banner, { pkg: pkg }
+      .pipe rename 'openbadges-displayer.min.js'
+      .pipe gulp.dest './dist/'
       
 
 #### build_demo
@@ -118,80 +108,52 @@ Build the demo.
 The demo is compiled from the `assets/demo` directory.
 
     gulp.task 'build_demo', ()->
-      return gulp.src(
-        path.join paths.server.coffee, '*coffee'
-      ).pipe(
-        coffee()
-      ).pipe(
-        uglify()
-      ).pipe(
-        gulp.dest paths.dist.demo
-      )
+      return gulp.src path.join(paths.server.coffee, '*coffee')
+      .pipe coffee()
+      .pipe uglify()
+      .pipe gulp.dest paths.dist.demo
 
 ### deploy_demo
 
 Builds the demo, then pushes to Github pages.
 
     gulp.task 'deploy_demo', ['build_demo'], () ->
-      return gulp.src(
-        [
+      return gulp.src [
           path.join paths.public, 'index.html'
           path.join paths.public, '*.png'
-        ], {
-          push:true
-        }
-      ).pipe(
-        deploy cacheDir: paths.deploy_cache
-      )
+        ], { push:true }
+      .pipe deploy cacheDir: paths.deploy_cache
 
 #### copy_templates
 
 Copy templates to dist directory.
 
     gulp.task 'copy_templates', ()->
-      return gulp.src(
-        path.join paths.client.templates, 'index.html'
-      ).pipe(
-        inlinesource './dist/'
-      ).pipe(
-        minifyHTML()
-      ).pipe(
-        gulp.dest paths.public
-      )
+      return gulp.src path.join(paths.client.templates, 'index.html')
+      .pipe inlinesource './dist/'
+      .pipe minifyHTML()
+      .pipe gulp.dest paths.public
 
 #### copy_images
 
 Copy images to dist directory.
 
     gulp.task 'copy_images', ()->
-      return gulp.src(
-        path.join paths.client.images, '*.png'
-      ).pipe(
-        gulp.dest paths.public
-      )
+      return gulp.src path.join paths.client.images, '*.png'
+      .pipe gulp.dest paths.public
 
 #### less
 
 Compile less to CSS.
 
     gulp.task 'less', () ->
-      return gulp.src(
-        path.join paths.client.less, '*.less'
-      ).pipe(
-        less()
-      ).pipe(
-        base64()
-      ).pipe(
-        minifyCSS()
-      ).pipe(
-        header banner, { pkg: pkg }
-      ).pipe(
-        rename 'openbadges-displayer.min.css'
-      ).pipe(
-        gulp.dest(
-          paths.public_css
-        )
-      )
+      return gulp.src path.join paths.client.less, '*.less'
+      .pipe less()
+      .pipe base64()
+      .pipe minifyCSS()
+      .pipe header banner, { pkg: pkg }
+      .pipe rename 'openbadges-displayer.min.css'
+      .pipe gulp.dest paths.public_css
 
 ### General tasks
 
@@ -200,44 +162,28 @@ Compile less to CSS.
 Lint check all coffeescript files.
 
     gulp.task 'lint', ()->
-      return gulp.src(
-        path.join path.join '.', 'assets', '**', '*coffee'
-      ).pipe(
-        coffeelint()
-      ).pipe(
-        coffeelint.reporter 'fail'
-      )
+      return gulp.src path.join '.', 'assets', '**', '*coffee'
+      .pipe coffeelint()
+      .pipe coffeelint.reporter 'fail'
 
 #### test
 
 Run test files.
 
     gulp.task 'test', () ->
-      return gulp.src(
-        path.join('test', 'test.litcoffee'), {
-          read: false
-        }
-      ).pipe(
-        coffeelint()
-      ).pipe(
-        coffeelint.reporter 'fail'
-      ).pipe(
-        coffee()
-      ).pipe mocha {reporter: 'nyan'} # Nyancat powers activate!
+      return gulp.src path.join('test', 'test.litcoffee'), read: false
+      .pipe coffeelint()
+      .pipe coffeelint.reporter 'fail'
+      .pipe coffee()
+      .pipe mocha {reporter: 'nyan'} # Nyancat powers activate!
 
 #### run_server
 
 Run the server.
 
     gulp.task 'run_server', ()->
-      return gulp.src(
-        './dist/demo/server.js'
-      ).pipe(
-        expressService {
-          file: './dist/demo/server.js'
-          NODE_ENV: 'DEV'
-        }
-      )
+      return gulp.src './dist/demo/server.js'
+       .pipe expressService file: './dist/demo/server.js', NODE_ENV: 'DEV'
 
 #### clean
 

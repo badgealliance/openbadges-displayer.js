@@ -1,10 +1,12 @@
 # OpebBadgesDisplayer
 -----
 
+## Initialization
+-----
+
 Require some libs.
 
     _ = require 'underscore'
-    path = require 'path'
     insertCss = require 'insert-css'
     fs = require 'fs'
     PNGBaker = require 'png-baker.js'
@@ -35,37 +37,43 @@ Read and set the badge template contents.
 Declare the main class.
 
     class OpenBadgesDisplayer
-      constructor: (options) ->
-        @disable_debug()
+      opts: {}
+      unbaked: false
+      old_logger: console.log
 
+      constructor: (options) ->
+        @allow_debugging true
         @init_lightbox()
 
         # If esc key is pressed, close the lightbox modal.
         window.addEventListener 'keydown', (e) =>
           if e.keyCode == 27
-            @hideLightbox()
+            @hide_lightbox()
 
         @insert_css()
         @badges = []
-        @load_images(options)
-        @parse_meta_data()
 
-## enable_debug
+## unbake
 -----
 
-Enable debugging.
+Unbake and display any badges on the page.
 
-      enable_debug: () ->
-        console.log = @old_logger
+Calls `load_images` AND `parse_meta_data`
 
-## disable_debug
------
+      unbake: (options)->
+        # check for existence of options
+        if not @unbaked
+          @unbaked = true
+          @opts = if options? then options else {}
+          @load_images()
+          @parse_meta_data()
 
-Disable debugging.
+## allow_debugging
 
-      disable_debug: () ->
-        @old_logger = console.log
-        console.log = () ->
+Enable / disable debugging.
+
+      allow_debugging: (debug)->
+        console.log = if debug then @old_logger else ()->
 
 ## init_lightbox
 -----
@@ -74,22 +82,22 @@ Initialize a lightbox.
 
       init_lightbox: () ->
 
-Ceate the overlay.
+        # Ceate the overlay.
 
         @overlay = document.createElement 'div'
         @overlay.setAttribute 'class', 'ob-overlay'
         @overlay.addEventListener 'click', () =>
-          @hideLightbox()
+          @hide_lightbox()
         @overlay.style.display = 'none'
 
-Create the lightbox
+        # Create the lightbox
 
         @lightbox = document.createElement 'div'
         @lightbox.setAttribute 'class', 'ob-lightbox container'
         @lightbox.setAttribute 'id', 'ob-lightbox'
         @lightbox.style.display = 'none'
 
-Append the overlay and lightbox to body.
+        # Append the overlay and lightbox to body.
 
         document.body.appendChild @overlay
         document.body.appendChild @lightbox
@@ -108,16 +116,13 @@ Insert the css.
 
 Load the images.
 
-      load_images: (options) ->
+      load_images: () ->
         console.log 'Loading images'
 
-        if typeof options is 'undefined'
-          options = {}
-
-        if options.id
-          @images = [document.getElementById options.id]
-        else if options.className
-          @images = document.getElementsByClassName options.className
+        if @opts.id
+          @images = [document.getElementById @opts.id]
+        else if @opts.className
+          @images = document.getElementsByClassName @opts.className
         else
           @images = document.getElementsByTagName 'img'
 
@@ -196,33 +201,68 @@ Display the badge.
         newDiv.appendChild img
 
         newDiv.addEventListener 'click', () =>
-          @showLightbox data
+          @show_lightbox data
 
-## showLightbox
+## show_lightbox
 -----
 
 Show the lightbox.
 
-      showLightbox: (data) ->
+      show_lightbox: (data) ->
+        body = document.body
+        html = document.documentElement
+
+        # disable scrolling
+        @allow_scrolling false
+
+        # display the overlay and modal
         @overlay.style.display = 'block'
         @lightbox.style.display = 'block'
-        document.getElementById('ob-lightbox').innerHTML = tplfile data
-        document.getElementById('close-modal').addEventListener 'click', () =>
-          @hideLightbox()
 
-## hideLightbox
+        # set the hight of the overlay to the document's height
+        @overlay.style.height = Math.max(
+          body.scrollHeight,
+          body.offsetHeight,
+          html.clientHeight,
+          html.scrollHeight,
+          html.offsetHeight
+        ) + 'px'
+
+        # insert the modal template
+        document.getElementById('ob-lightbox').innerHTML = tplfile data
+
+        # listen for closing click
+        document.getElementById('close-modal').addEventListener 'click', () =>
+          @hide_lightbox()
+
+## hide_lightbox
 -----
 
 Hide the lightbox.
 
-      hideLightbox: () ->
+      hide_lightbox: () ->
         @overlay.style.display = 'none'
         @lightbox.style.display = 'none'
+        @allow_scrolling true
 
-Add OpenBadgesDisplayer to window.obd
 
-    window.obd = OpenBadgesDisplayer
+## allow_scrolling
+-----
 
-Export the module.
+Enables / disables browser scrolling.
 
-    module.exports.OpenBadgesDisplayer = OpenBadgesDisplayer
+      allow_scrolling: (scroll) ->
+        document.documentElement.style.overflow =
+          if scroll then 'auto' else 'hidden'
+
+        # ie support
+        document.body.scroll = if scroll then 'yes' else 'no'
+
+## Finalization
+-----
+
+An instance of OpenBadgesDisplayer gets attached to window
+
+    window.openbadges = new OpenBadgesDisplayer
+
+    module.exports = OpenBadgesDisplayer

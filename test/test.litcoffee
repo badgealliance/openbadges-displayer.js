@@ -6,10 +6,16 @@ Tests are written in mocha.
     path = require 'path'
     assert = require 'assert'
     jsdom = require 'jsdom'
-    badge = '
-    <img src="https://curlee.github.io/openbadges-displayer.js/demobadge.png">'
     obd = path.join '..', 'dist', 'openbadges-displayer.min.js'
     win = ''
+
+Currently we are relying on an image hosted by one of the authors on Github.
+This needs a better solution as Github times out occasionally which causes the
+tests to timeout and fail. Also, relying on an external file like this is
+terrible practice.
+
+    badge = '
+    <img src="https://curlee.github.io/openbadges-displayer.js/demobadge.png">'
 
 ## Functions
 -----
@@ -79,8 +85,26 @@ Test the default value of unbaked.
 
 Test the `unbake()` function
 
-      describe '#unbake', ()->
+      describe 'unbaked', ()->
         it 'should return true if badge is unbaked', (done)->
           windowAssert (win)->
             win.openbadges.unbake()
             done assert.equal win.openbadges.unbaked, true
+
+      describe 'opts', ()->
+        it 'should return true if opts.foo is bar', (done)->
+          windowAssert (win)->
+            options = {foo:'bar'}
+            win.openbadges.unbake options
+            done assert.deepEqual win.openbadges.opts, options
+
+        it 'should return true if opts is {}', (done)->
+          windowAssert (win)->
+            win.openbadges.unbake()
+            done assert.deepEqual win.openbadges.opts, {}
+
+      describe 'images', ()->
+        it 'should have a length of 1', (done)->
+          windowAssert (win)->
+            win.openbadges.unbake()
+            done assert.equal win.openbadges.images.length, 1

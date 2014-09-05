@@ -14,14 +14,18 @@ Tests are written in mocha.
 ## Functions
 -----
 
-Make testing easier.
+Make testing easier. Pass this function a callback.
 
-    jsdom.env(
-      badge
-      [obd]
-      done: (err, window)->
-        win = window
-    )
+jsdom creates a page with openbadges-displayer.min.js attached
+and passes the window to your callback.
+
+    windowAssert = (callback)->
+      jsdom.env(
+        badge
+        [obd]
+        done: (err, window)->
+          callback window
+      )
 
 ## The tests
 -----
@@ -30,45 +34,55 @@ Tests for the OpenBadgesDisplayer class.
 
     describe 'OpenBadgesDisplayer', () ->
 
-### vars
-
-Test class variables
+Make sure all the variables we expect exist.
 
       describe '#properties', ()->
         it 'should return true if all properties are present', (done)->
-          jsdom.env(
-            badge
-            [obd]
-            done: (err, window)->
-              for p in [
-                'opts'
-                'unbaked'
-                'old_logger'
-              ]
-                assert win.openbadges[p]?, p + ' does not exist'
-              done()
-          )
+          windowAssert (win)->
+            for p in [
+              'opts'
+              'unbaked'
+              'old_logger'
+            ]
+              assert win.openbadges[p]?, p + ' does not exist'
+            done()
+
+Make sure all the functions we expect exist.
 
       describe '#functions', ()->
         it 'should return true if all functions are present', (done)->
-          jsdom.env(
-            badge
-            [obd]
-            done: (err, window)->
-              for f in [
-                'constructor'
-                'unbake'
-                'allow_debugging'
-                'init_lightbox'
-                'insert_css'
-                'load_images'
-                'parse_meta_data'
-                'parse_badge'
-                'display_badge'
-                'show_lightbox'
-                'hide_lightbox'
-                'allow_scrolling'
-              ]
-                assert win.openbadges[f]?, f + ' does not exist'
-              done()
-          )
+
+          windowAssert (win)->
+            for f in [
+              'constructor'
+              'unbake'
+              'allow_debugging'
+              'init_lightbox'
+              'insert_css'
+              'load_images'
+              'parse_meta_data'
+              'parse_badge'
+              'display_badge'
+              'show_lightbox'
+              'hide_lightbox'
+              'allow_scrolling'
+            ]
+              assert win.openbadges[f]?, f + ' does not exist'
+            done()
+
+Test the default value of unbaked.
+
+      describe '#unbaked', ()->
+        it 'should return false if badge is not unbaked', (done)->
+          windowAssert (win)->
+            assert.equal win.openbadges.unbaked, false
+            done()
+
+Test the `unbake()` function
+
+      describe '#unbake', ()->
+        it 'should return true if badge is unbaked', (done)->
+          windowAssert (win)->
+            win.openbadges.unbake()
+            assert.equal win.openbadges.unbaked, true
+            done()

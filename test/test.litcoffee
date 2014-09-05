@@ -75,8 +75,7 @@ Test the default value of unbaked.
       describe '#unbaked', ()->
         it 'should return false if badge is not unbaked', (done)->
           windowAssert (win)->
-            assert.equal win.openbadges.unbaked, false
-            done()
+            done assert.equal win.openbadges.unbaked, false
 
 Test the `unbake()` function
 
@@ -84,5 +83,4 @@ Test the `unbake()` function
         it 'should return true if badge is unbaked', (done)->
           windowAssert (win)->
             win.openbadges.unbake()
-            assert.equal win.openbadges.unbaked, true
-            done()
+            done assert.equal win.openbadges.unbaked, true
